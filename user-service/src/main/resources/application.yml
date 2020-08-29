@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: user-service
+  data:
+    mongodb:
+      database: authentication
+#  kafka:
+#    consumer:
+#      bootstrap-servers: localhost:9092
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 689062928154-pogk4e8v44f7lhl89pon5t8m3cd2hgel.apps.googleusercontent.com
+            client-secret: 9spkQdl0AawztpxoEYA7yEJu
+      resourceserver:
+        opaquetoken:
+          client-id: 689062928154-pogk4e8v44f7lhl89pon5t8m3cd2hgel.apps.googleusercontent.com
+          client-secret: 9spkQdl0AawztpxoEYA7yEJu
+          introspection-uri: https://www.googleapis.com/oauth2/v3/userinfo
+#  main:
+#    allow-bean-definition-overriding: true
+
+
+server:
+  port: 8011
+
+#security:
+#  oauth2:
+#    resourceserver:
+#      opaque-token:
+#        client-id: 689062928154-pogk4e8v44f7lhl89pon5t8m3cd2hgel.apps.googleusercontent.com
+#        client-secret: 9spkQdl0AawztpxoEYA7yEJu
+#        introspection-uri: https://www.googleapis.com/oauth2/v3/userinfo
+#    resource:
+#      user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+#      prefer-token-info: false
+
+logging:
+  level:
+    root: ERROR
+    com.innova: INFO

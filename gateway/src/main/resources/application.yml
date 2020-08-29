@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: gateway
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 689062928154-pogk4e8v44f7lhl89pon5t8m3cd2hgel.apps.googleusercontent.com
+            client-secret: 9spkQdl0AawztpxoEYA7yEJu
+
+  cloud:
+    gateway:
+      routes:
+        - id: admin-servicre
+          uri: lb://admin-service
+          predicates:
+            - Path=/admin-service/**
+          filters:
+            - TokenRelay=
+        - id: user-servicre
+          uri: lb://user-service
+          predicates:
+            - Path=/user-service/**
+          filters:
+            - TokenRelay=
+        - id: patient-servicre
+          uri: lb://patient-service
+          predicates:
+            - Path=/patient-service/**
+          filters:
+            - TokenRelay=
+
+logging:
+  level:
+    root: ERROR
+    com.innova: INFO
+#    org.springframework.cloud.gateway: TRACE
+#    org.springframework.http.server.reactive: DEBUG
+#    org.springframework.web.reactive: DEBUG
+#    reactor.ipc.netty: DEBUG
+#    reactor.netty: DEBUG
+server:
+  port: 8081

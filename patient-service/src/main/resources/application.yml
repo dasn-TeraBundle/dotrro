@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: patient-service
+  data:
+    mongodb:
+      database: patient
+  kafka:
+#    consumer:
+#      bootstrap-servers: localhost:9092
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+server:
+  port: 8021
+  servlet:
+    context-path: /${spring.application.name}
+
+security:
+  oauth2:
+    resource:
+      user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+      prefer-token-info: false
+
+logging:
+  level:
+    root: ERROR
+    com.innova: INFO
+

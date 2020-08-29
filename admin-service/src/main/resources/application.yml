@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: admin-service
+
+
+server:
+  port: 8001
+  servlet:
+    context-path: /${spring.application.name}
+
+security:
+  oauth2:
+    resource:
+      user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+      prefer-token-info: false
+
+logging:
+  level:
+    root: ERROR
+    com.innova: INFO

@@ -1,0 +1,32 @@
+DATABASES         COLLECTIONS
+authentication => users
+setup          => user_types, facility_types, coupons
+patient        => patients
+doctor         => doctors, ratings
+facility       => facilities, ratings
+bookings       => bookings, encounters, payments
+
+USERS_TYPE
+patirent, doctor, facility_admin, admin
+
+FACILITY_TYPE
+pvt_clinic (solo doc), polyclinic
+
+SERVICES
+UserService      - Registration and Validation of users after OAuth2 login
+AdminService     - Application admin works
+PatientService   - CRUD
+DoctorService    - CRUD
+FacilityService  - CRUD
+SearchService    - Fetches from both doctor and facility
+BookingService   - Checks timing in facility and books appointment
+
+COLLECTION        DOCUMENT_FIELDS
+users          => email, name, password, type, isEnabled, isActive
+user_types     => key, displayName
+facility_types => key, displayName
+patients       => name, email, phone, dob, sex, photo, address, height, weight, blood group, 
+doctor         => name, email, dob, sex, photo, experience, degree, speciality, description
+facilities     => name, admins, type, address, phone, location, doctors (doctor, timing)
+bookings       => id, patient, doctor, facility, timing, status
+encounter      => id, booking_details
