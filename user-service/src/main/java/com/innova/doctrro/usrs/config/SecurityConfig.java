@@ -1,12 +1,10 @@
 package com.innova.doctrro.usrs.config;
 //
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.server.resource.introspection.ReactiveOpaqueTokenIntrospector;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
@@ -34,8 +32,8 @@ public class SecurityConfig {
     public SecurityWebFilterChain pringSecurityFilterChain(ServerHttpSecurity http) throws Exception {
         http
                 .authorizeExchange()
-                .pathMatchers("/user-service/me").authenticated()
-                .pathMatchers("/user-service/roles/**").permitAll()
+                .pathMatchers("/**/roles/**", "/**/**/roles/**").permitAll()
+                .anyExchange().authenticated()
                 .and()
                 .oauth2ResourceServer()
                 .opaqueToken();
