@@ -11,17 +11,24 @@ spring:
       bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          client-secret: id
+          client-id: sec
+          introspection-uri: https://www.googleapis.com/oauth2/v3/userinfo
 
 server:
   port: 8021
-  servlet:
-    context-path: /${spring.application.name}
+#  servlet:
+#    context-path: /${spring.application.name}
 
-security:
-  oauth2:
-    resource:
-      user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
-      prefer-token-info: false
+#security:
+#  oauth2:
+#    resource:
+#      user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+#      prefer-token-info: false
 
 logging:
   level:

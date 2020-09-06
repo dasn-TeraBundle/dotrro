@@ -1,51 +1,40 @@
 package com.innova.doctrro.ps.config;
 
 import com.innova.doctrro.ps.feign.UserServiceClient;
-import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.server.resource.introspection.ReactiveOpaqueTokenIntrospector;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@EnableResourceServer
-public class SecurityConfig extends ResourceServerConfigurerAdapter {
+@EnableWebFluxSecurity
+public class SecurityConfig {
+
+    private final UserServiceClient userServiceClient;
 
     @Autowired
-    private UserServiceClient userServiceClient;
-
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/**")
-                .authenticated();
+    public SecurityConfig(UserServiceClient userServiceClient) {
+        this.userServiceClient = userServiceClient;
     }
 
     @Bean
-    public AuthoritiesExtractor authoritiesExtractor() {
-        return map -> {
-            List<GrantedAuthority> lst = new ArrayList<>();
-            try {
-                userServiceClient.getRoles(map.get("email").toString())
-                        .forEach(role -> lst.add(new SimpleGrantedAuthority(role)));
-            } catch (FeignException ex) {
-                ex.printStackTrace();
-                lst.add(new SimpleGrantedAuthority("ROLE_USER"));
-            }
+    public SecurityWebFilterChain pringSecurityFilterChain(ServerHttpSecurity http) throws Exception {
+        http
+                .authorizeExchange()
+                .anyExchange().authenticated()
+                .and()
+                .oauth2ResourceServer()
+                .opaqueToken();
 
-            return lst;
-        };
+        return http.build();
+    }
+
+    @Bean
+    public ReactiveOpaqueTokenIntrospector introspector() {
+        return new UserInfoOpaqueTokenIntrospector(userServiceClient);
     }
 }
