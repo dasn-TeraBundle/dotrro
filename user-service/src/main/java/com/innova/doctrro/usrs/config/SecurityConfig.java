@@ -1,6 +1,7 @@
 package com.innova.doctrro.usrs.config;
 //
 
+import com.innova.doctrro.common.security.CustomNimbusReactiveOpaqueTokenIntrospector;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -43,6 +44,6 @@ public class SecurityConfig {
 
     @Bean
     public ReactiveOpaqueTokenIntrospector introspector() {
-        return new UserInfoOpaqueTokenIntrospector();
+        return new CustomNimbusReactiveOpaqueTokenIntrospector();
     }
 }

@@ -7,13 +7,14 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Document(collection = "patients")
-public class Patient {
+public class Patient implements Serializable {
 
     @Id
     private String email;
@@ -48,7 +49,7 @@ public class Patient {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class Personal {
+    public static class Personal implements Serializable {
         private Gender sex;
         private String dob;
         private String bloodGroup;
@@ -67,7 +68,7 @@ public class Patient {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class Lifestyle {
+    public static class Lifestyle implements Serializable {
         private String smoke;
         private String alcohol;
         private String diet;
@@ -86,7 +87,7 @@ public class Patient {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class Medical {
+    public static class Medical implements Serializable {
         private Set<String> chronic;
 
         public Medical(Set<String> chronic) {

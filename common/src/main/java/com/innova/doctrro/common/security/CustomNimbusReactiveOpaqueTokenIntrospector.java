@@ -1,4 +1,4 @@
-package com.innova.doctrro.usrs.config;
+package com.innova.doctrro.common.security;
 
 import com.nimbusds.oauth2.sdk.TokenIntrospectionErrorResponse;
 import com.nimbusds.oauth2.sdk.TokenIntrospectionResponse;
@@ -25,10 +25,9 @@ import java.time.Instant;
 import java.util.*;
 
 
-public class UserInfoOpaqueTokenIntrospector implements ReactiveOpaqueTokenIntrospector {
+public class CustomNimbusReactiveOpaqueTokenIntrospector implements ReactiveOpaqueTokenIntrospector {
 
     private final WebClient webClient = WebClient.create();
-    private final String authorityPrefix = "ROLE_";
     private final URI introspectionUri = URI.create("https://www.googleapis.com/oauth2/v3/userinfo");
 
     @Override
@@ -43,8 +42,7 @@ public class UserInfoOpaqueTokenIntrospector implements ReactiveOpaqueTokenIntro
                 }).map(this::convertClaimsSet)
                 .onErrorMap((e) -> {
                     return !(e instanceof OAuth2IntrospectionException);
-                }, this::onError)
-                .log();
+                }, this::onError);
     }
 
     private Mono<ClientResponse> makeRequest(String token) {
@@ -76,10 +74,7 @@ public class UserInfoOpaqueTokenIntrospector implements ReactiveOpaqueTokenIntro
                 Date d = new Date();
                 JSONObject jsonObject = response.getContentAsJSONObject();
                 jsonObject.put("active", true);
-//                jsonObject.put("iss", "https://accounts.google.com");
-//                jsonObject.put("iat", d.getTime()/1000);
-//                jsonObject.put("exp", d.getTime() + 60*60);
-                jsonObject.put("scope", "USER");
+                jsonObject.put("scope", "ROLE_USER");
                 return TokenIntrospectionSuccessResponse.parse(jsonObject);
             } else {
                 return TokenIntrospectionErrorResponse.parse(response);
@@ -150,7 +145,7 @@ public class UserInfoOpaqueTokenIntrospector implements ReactiveOpaqueTokenIntro
 
             while (var5.hasNext()) {
                 String scope = (String) var5.next();
-                authorities.add(new SimpleGrantedAuthority(this.authorityPrefix + scope));
+                authorities.add(new SimpleGrantedAuthority(scope));
             }
         }
 
@@ -168,13 +163,5 @@ public class UserInfoOpaqueTokenIntrospector implements ReactiveOpaqueTokenIntro
     private OAuth2IntrospectionException onError(Throwable e) {
         return new OAuth2IntrospectionException(e.getMessage(), e);
     }
-
-//    private OAuth2AuthenticatedPrincipal makeUserInfoRequest(OAuth2AuthenticatedPrincipal principal) {
-//        System.out.println(principal.getAttributes());
-//        return (OAuth2AuthenticatedPrincipal) rest.get()
-//                .uri("https://www.googleapis.com/oauth2/v3/userinfo")
-//                .retrieve()
-//                .bodyToMono(Object.class);
-//    }
 
 }

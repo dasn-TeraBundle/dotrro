@@ -32,6 +32,6 @@ server:
 
 logging:
   level:
-    root: ERROR
-    com.innova: INFO
+    root: INFO
+    com.innova: DEBUG
 
