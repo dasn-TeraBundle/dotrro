@@ -31,6 +31,13 @@ spring:
             - Path=/patient-service/**
           filters:
             - TokenRelay=
+        - id: doctor-servicre
+          uri: lb://doctor-service
+          predicates:
+          - Path=/doctor-service/**
+          filters:
+          - TokenRelay=
+
 
 logging:
   level:
