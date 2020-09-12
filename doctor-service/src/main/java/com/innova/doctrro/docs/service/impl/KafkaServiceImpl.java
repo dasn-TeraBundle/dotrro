@@ -1,4 +1,4 @@
-package com.innova.doctrro.ps.service.impl;
+package com.innova.doctrro.docs.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

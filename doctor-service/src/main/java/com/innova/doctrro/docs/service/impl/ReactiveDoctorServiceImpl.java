@@ -1,5 +1,8 @@
 package com.innova.doctrro.docs.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.innova.doctrro.common.dto.KafkaMessage;
+import com.innova.doctrro.common.service.KafkaService;
 import com.innova.doctrro.docs.beans.Doctor;
 import com.innova.doctrro.docs.dao.ReactiveDoctorDao;
 import com.innova.doctrro.docs.exception.DoctorNotFoundException;
@@ -20,18 +23,32 @@ import static com.innova.doctrro.docs.service.Converters.DoctorConverter;
 @Service
 public class ReactiveDoctorServiceImpl implements ReactiveDoctorService {
 
+    private static final String KAFKA_DOCTOR_TOPIC = "users_create";
+
     private final ReactiveDoctorDao reactiveDoctorDao;
+    private final KafkaService kafkaService;
 
     @Autowired
-    public ReactiveDoctorServiceImpl(ReactiveDoctorDao reactiveDoctorDao) {
+    public ReactiveDoctorServiceImpl(ReactiveDoctorDao reactiveDoctorDao, KafkaService kafkaService) {
         this.reactiveDoctorDao = reactiveDoctorDao;
+        this.kafkaService = kafkaService;
     }
 
     @Override
     public Mono<DoctorDtoResponse> create(DoctorDtoRequest item) {
-        Doctor doctor = DoctorConverter.convert(item);
-        return reactiveDoctorDao.create(doctor)
-                .map(DoctorConverter::convert)
+        Doctor doctor1 = DoctorConverter.convert(item);
+        return reactiveDoctorDao.create(doctor1)
+                .flatMap(doctor -> {
+                    var kafkaMsg = new KafkaMessage(item.getEmail(), "C", "doctors");
+                    try {
+                        kafkaService.send(KAFKA_DOCTOR_TOPIC, kafkaMsg);
+                    } catch (JsonProcessingException e) {
+                        reactiveDoctorDao.remove(doctor);
+                        return Mono.defer(() -> Mono.error(new RuntimeException("")));
+                    }
+
+                    return Mono.just(DoctorConverter.convert(doctor));
+                })
                 .onErrorMap(ex -> {
                     if (ex instanceof DuplicateKeyException)
                         return new DuplicateDoctorException();
@@ -68,7 +85,22 @@ public class ReactiveDoctorServiceImpl implements ReactiveDoctorService {
 
                     return reactiveDoctorDao.update(regId, doctor);
                 })
-                .map(DoctorConverter::convert);
+                .flatMap(doctor -> {
+                    var emailUpdate = new KafkaMessage.Update("email", null, newEmail);
+                    var nameUpdate = new KafkaMessage.Update("name", null, doctor.getName());
+                    var kafkaMsg = new KafkaMessage(newEmail, "U", "doctors");
+                    kafkaMsg.addUpdate(emailUpdate);
+                    kafkaMsg.addUpdate(nameUpdate);
+                    try {
+                        kafkaService.send(KAFKA_DOCTOR_TOPIC, kafkaMsg);
+                    } catch (JsonProcessingException e) {
+                        doctor.getEmails().remove(newEmail);
+                        reactiveDoctorDao.update(regId, doctor);
+                        return Mono.defer(() -> Mono.error(new RuntimeException("")));
+                    }
+
+                    return Mono.just(DoctorConverter.convert(doctor));
+                });
     }
 
     @Override

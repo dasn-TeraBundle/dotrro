@@ -2,15 +2,11 @@ package com.innova.doctrro.ps.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.innova.doctrro.common.dto.KafkaMessage;
+import com.innova.doctrro.common.service.KafkaService;
 import com.innova.doctrro.ps.beans.Patient;
 import com.innova.doctrro.ps.dao.PatientDao;
-
-import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
-import static com.innova.doctrro.ps.dto.PatientDto.*;
-
 import com.innova.doctrro.ps.exception.PatientException;
 import com.innova.doctrro.ps.exception.PatientNotFoundException;
-import com.innova.doctrro.ps.service.KafkaService;
 import com.innova.doctrro.ps.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +14,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
+import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
+import static com.innova.doctrro.ps.dto.PatientDto.*;
+
 
 @Service
 public class PatientServiceImpl implements PatientService {
 
+    private static final String TOPIC = "users_create";
     private final PatientDao patientDao;
     private final KafkaService kafkaService;
-    private static final String TOPIC = "patients";
 
     @Autowired
     public PatientServiceImpl(PatientDao patientDao, KafkaService kafkaService) {
@@ -37,7 +36,7 @@ public class PatientServiceImpl implements PatientService {
         throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
-    public PatientDtoResponse create(Map<String, String> details, PatientDtoRequest item){
+    public PatientDtoResponse create(Map<String, String> details, PatientDtoRequest item) {
         Patient patient = convert(item);
         patient.setEmail(details.get("email"));
         patient.setName(details.get("name"));

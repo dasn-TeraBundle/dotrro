@@ -1,4 +1,4 @@
-package com.innova.doctrro.ps.service;
+package com.innova.doctrro.common.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.innova.doctrro.common.dto.KafkaMessage;
