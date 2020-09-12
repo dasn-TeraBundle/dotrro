@@ -14,35 +14,40 @@ public class Converters {
     private Converters() {
     }
 
-    public static Doctor convert(DoctorDtoRequest request) {
-        var personal = new Doctor.Personal(request.getDob(), request.getSex());
-        var about = new Doctor.About(request.getExperience(), request.getDegree(), request.getSpeciality(), request.getAbout());
+    public static class DoctorConverter {
 
-        return new Doctor(request.getRegId(), request.getEmail(), request.getName(), personal, about);
-    }
+        private DoctorConverter() { }
 
-    public static DoctorDtoResponse convert(Doctor doctor) {
-        var resp = new DoctorDtoResponse();
+        public static Doctor convert(DoctorDtoRequest request) {
+            var personal = new Doctor.Personal(request.getDob(), request.getSex());
+            var about = new Doctor.About(request.getExperience(), request.getDegree(), request.getSpeciality(), request.getAbout());
 
-        resp.setRegId(doctor.getRegId());
-        resp.setEmails(doctor.getEmails());
-        resp.setName(doctor.getName());
+            return new Doctor(request.getRegId(), request.getEmail(), request.getName(), personal, about);
+        }
 
-        resp.setDob(doctor.getPersonal().getDob());
-        resp.setSex(doctor.getPersonal().getSex().toString());
+        public static DoctorDtoResponse convert(Doctor doctor) {
+            var resp = new DoctorDtoResponse();
 
-        resp.setExperience(doctor.getAbout().getExperience());
-        resp.setDegree(doctor.getAbout().getDegree());
-        resp.setSpeciality(doctor.getAbout().getSpeciality());
-        resp.setAbout(doctor.getAbout().getAbout());
+            resp.setRegId(doctor.getRegId());
+            resp.setEmails(doctor.getEmails());
+            resp.setName(doctor.getName());
 
-        return resp;
-    }
+            resp.setDob(doctor.getPersonal().getDob());
+            resp.setSex(doctor.getPersonal().getSex().toString());
 
-    public static List<DoctorDtoResponse> convert(List<Doctor> doctors) {
-        return doctors.stream()
-                .map(Converters::convert)
-                .collect(Collectors.toList());
+            resp.setExperience(doctor.getAbout().getExperience());
+            resp.setDegree(doctor.getAbout().getDegree());
+            resp.setSpeciality(doctor.getAbout().getSpeciality());
+            resp.setAbout(doctor.getAbout().getAbout());
+
+            return resp;
+        }
+
+        public static List<DoctorDtoResponse> convert(List<Doctor> doctors) {
+            return doctors.stream()
+                    .map(DoctorConverter::convert)
+                    .collect(Collectors.toList());
+        }
     }
 
     public static class DoctorRatingConverter {

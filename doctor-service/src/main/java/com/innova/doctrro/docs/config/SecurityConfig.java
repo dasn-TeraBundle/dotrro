@@ -27,6 +27,8 @@ public class SecurityConfig {
                 .authorizeExchange()
                 .pathMatchers("/doctor-service/doctors/reg-id/**").permitAll()
                 .pathMatchers(HttpMethod.GET, "/doctor-service/doctors/").permitAll()
+                .pathMatchers("/doctor-service/doc-ratings/doc/**").permitAll()
+                .pathMatchers("/doctor-service/doc-ratings/doc-avg/**").permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .oauth2ResourceServer()

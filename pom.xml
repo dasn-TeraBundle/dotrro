@@ -20,6 +20,10 @@
         <java.version>11</java.version>
         <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.exclusions>
+            **/config/**,
+            **Application**
+        </sonar.exclusions>
     </properties>
 
     <modules>
@@ -29,6 +33,7 @@
         <module>user-service</module>
         <module>admin-service</module>
         <module>patient-service</module>
+        <module>doctor-service</module>
     </modules>
 
     <dependencies>
