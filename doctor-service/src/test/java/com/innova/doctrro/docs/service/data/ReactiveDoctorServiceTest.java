@@ -1,7 +1,7 @@
 package com.innova.doctrro.docs.service.data;
 
 
-import com.innova.doctrro.docs.exception.DoctorNotFoundException;
+import com.innova.doctrro.docs.exception.DoctorDBExceptionFactory;
 import com.innova.doctrro.docs.service.ReactiveDoctorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class ReactiveDoctorServiceTest {
     void findById() {
         StepVerifier.create(doctorService.findById("001"))
                 .expectSubscription()
-                .expectError(DoctorNotFoundException.class)
+                .expectError(DoctorDBExceptionFactory.DoctorNotFoundException.class)
                 .verify();
     }
 

@@ -40,6 +40,26 @@ public class KafkaMessage implements Serializable {
         updates.add(update);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        KafkaMessage that = (KafkaMessage) o;
+
+        if (operation != that.operation) return false;
+        if (!collectionName.equals(that.collectionName)) return false;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = operation.hashCode();
+        result = 31 * result + collectionName.hashCode();
+        result = 31 * result + id.hashCode();
+        return result;
+    }
+
     @Getter
     @Setter
     @NoArgsConstructor
