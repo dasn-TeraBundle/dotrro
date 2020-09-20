@@ -1,6 +1,6 @@
 package com.innova.doctrro.docs.dao.impl;
 
-import com.innova.doctrro.docs.beans.Facility;
+import com.innova.doctrro.common.beans.Facility;
 import com.innova.doctrro.docs.dao.ReactiveFacilityDao;
 import com.innova.doctrro.docs.dao.repository.ReactiveFacilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;

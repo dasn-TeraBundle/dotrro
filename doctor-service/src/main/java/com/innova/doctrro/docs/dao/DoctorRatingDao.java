@@ -1,7 +1,7 @@
 package com.innova.doctrro.docs.dao;
 
 import com.innova.doctrro.common.dao.GenericDao;
-import com.innova.doctrro.docs.beans.DoctorRating;
+import com.innova.doctrro.common.beans.DoctorRating;
 
 import java.util.List;
 import java.util.stream.Stream;

@@ -1,6 +1,6 @@
 package com.innova.doctrro.docs.dao.impl;
 
-import com.innova.doctrro.docs.beans.Doctor;
+import com.innova.doctrro.common.beans.Doctor;
 import com.innova.doctrro.docs.dao.DoctorDao;
 import com.innova.doctrro.docs.dao.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;

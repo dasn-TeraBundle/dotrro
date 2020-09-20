@@ -1,4 +1,4 @@
-package com.innova.doctrro.docs.beans;
+package com.innova.doctrro.common.beans;
 
 
 import lombok.AllArgsConstructor;

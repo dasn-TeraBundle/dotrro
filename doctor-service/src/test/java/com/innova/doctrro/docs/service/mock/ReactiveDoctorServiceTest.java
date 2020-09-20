@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.innova.doctrro.common.constants.Gender;
 import com.innova.doctrro.common.dto.KafkaMessage;
 import com.innova.doctrro.common.service.KafkaService;
-import com.innova.doctrro.docs.beans.Doctor;
+import com.innova.doctrro.common.beans.Doctor;
 import com.innova.doctrro.docs.dao.ReactiveDoctorDao;
 import com.innova.doctrro.docs.exception.DoctorDBExceptionFactory;
 import com.innova.doctrro.docs.service.impl.ReactiveDoctorServiceImpl;

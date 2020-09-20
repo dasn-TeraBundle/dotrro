@@ -1,1 +1,1 @@
-%KAFKA_HOME%\bin\windows\kafka-topics.bat --describe  --zookeeper localhost:2181 --topic patients
+%KAFKA_HOME%\bin\windows\kafka-topics.bat --describe  --zookeeper localhost:2181 --topic users_create

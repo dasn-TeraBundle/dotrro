@@ -1,9 +1,9 @@
 package com.innova.doctrro.docs.service;
 
 import com.innova.doctrro.common.dto.FacilityDto;
-import com.innova.doctrro.docs.beans.Doctor;
-import com.innova.doctrro.docs.beans.DoctorRating;
-import com.innova.doctrro.docs.beans.Facility;
+import com.innova.doctrro.common.beans.Doctor;
+import com.innova.doctrro.common.beans.DoctorRating;
+import com.innova.doctrro.common.beans.Facility;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +15,7 @@ import static com.innova.doctrro.common.dto.DoctorRatingDto.DoctorRatingDtoReque
 import static com.innova.doctrro.common.dto.DoctorRatingDto.DoctorRatingDtoResponse;
 import static com.innova.doctrro.common.dto.FacilityDto.FacilityDtoRequest;
 import static com.innova.doctrro.common.dto.FacilityDto.FacilityDtoResponse;
-import static com.innova.doctrro.docs.beans.Facility.Location;
+import static com.innova.doctrro.common.beans.Facility.Location;
 
 public class Converters {
 

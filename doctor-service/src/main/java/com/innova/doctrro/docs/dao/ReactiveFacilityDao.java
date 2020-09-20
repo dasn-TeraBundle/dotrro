@@ -1,7 +1,7 @@
 package com.innova.doctrro.docs.dao;
 
 import com.innova.doctrro.common.dao.ReactiveGenericDao;
-import com.innova.doctrro.docs.beans.Facility;
+import com.innova.doctrro.common.beans.Facility;
 import reactor.core.publisher.Flux;
 
 public interface ReactiveFacilityDao extends ReactiveGenericDao<Facility, String> {
