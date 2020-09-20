@@ -19,6 +19,11 @@
     <properties>
         <java.version>11</java.version>
         <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
+        <sonar.exclusions>
+            **/config/**,
+            **Application**
+        </sonar.exclusions>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
     </properties>
 
@@ -29,6 +34,7 @@
         <module>user-service</module>
         <module>admin-service</module>
         <module>patient-service</module>
+        <module>doctor-service</module>
     </modules>
 
     <dependencies>
@@ -68,6 +74,34 @@
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>3.7.0.1746</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/beans/*</exclude>
+                        <exclude>**/config/*</exclude>
+                        <exclude>**/dto/*</exclude>
+                        <exclude>**/*Application*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

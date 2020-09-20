@@ -8,6 +8,7 @@ import com.nimbusds.oauth2.sdk.id.Audience;
 import net.minidev.json.JSONObject;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrincipal;
@@ -55,7 +56,7 @@ public class CustomNimbusReactiveOpaqueTokenIntrospector implements ReactiveOpaq
 
     private Mono<HTTPResponse> adaptToNimbusResponse(ClientResponse responseEntity) {
         HTTPResponse response = new HTTPResponse(responseEntity.rawStatusCode());
-        response.setHeader("Content-Type", responseEntity.headers().contentType().get().toString());
+        response.setHeader("Content-Type", responseEntity.headers().contentType().orElse(MediaType.APPLICATION_JSON).toString());
         if (response.getStatusCode() != 200) {
             return responseEntity.bodyToFlux(DataBuffer.class).map(DataBufferUtils::release).then(Mono.error(new OAuth2IntrospectionException("Introspection endpoint responded with " + response.getStatusCode())));
         } else {
@@ -100,10 +101,10 @@ public class CustomNimbusReactiveOpaqueTokenIntrospector implements ReactiveOpaq
 
     private OAuth2AuthenticatedPrincipal convertClaimsSet(TokenIntrospectionSuccessResponse response) {
         Map<String, Object> claims = response.toJSONObject();
-        Collection<GrantedAuthority> authorities = new ArrayList();
-        Iterator var5;
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        Iterator<?> var5;
         if (response.getAudience() != null) {
-            List<String> audiences = new ArrayList();
+            List<String> audiences = new ArrayList<>();
             var5 = response.getAudience().iterator();
 
             while (var5.hasNext()) {
