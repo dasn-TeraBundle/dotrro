@@ -1,13 +1,21 @@
 package com.innova.doctrro.docs.service;
 
-import static com.innova.doctrro.common.dto.DoctorRatingDto.*;
+import com.innova.doctrro.common.dto.FacilityDto;
 import com.innova.doctrro.docs.beans.Doctor;
 import com.innova.doctrro.docs.beans.DoctorRating;
+import com.innova.doctrro.docs.beans.Facility;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.innova.doctrro.common.dto.DoctorDto.*;
+import static com.innova.doctrro.common.dto.DoctorDto.DoctorDtoRequest;
+import static com.innova.doctrro.common.dto.DoctorDto.DoctorDtoResponse;
+import static com.innova.doctrro.common.dto.DoctorRatingDto.DoctorRatingDtoRequest;
+import static com.innova.doctrro.common.dto.DoctorRatingDto.DoctorRatingDtoResponse;
+import static com.innova.doctrro.common.dto.FacilityDto.FacilityDtoRequest;
+import static com.innova.doctrro.common.dto.FacilityDto.FacilityDtoResponse;
+import static com.innova.doctrro.docs.beans.Facility.Location;
 
 public class Converters {
 
@@ -16,7 +24,8 @@ public class Converters {
 
     public static class DoctorConverter {
 
-        private DoctorConverter() { }
+        private DoctorConverter() {
+        }
 
         public static Doctor convert(DoctorDtoRequest request) {
             var personal = new Doctor.Personal(request.getDob(), request.getSex());
@@ -52,7 +61,8 @@ public class Converters {
 
     public static class DoctorRatingConverter {
 
-        private DoctorRatingConverter() { }
+        private DoctorRatingConverter() {
+        }
 
         public static DoctorRating convert(DoctorRatingDtoRequest req) {
             var doctor = new DoctorRating.RatedDoctor(req.getDoctorRegId(), req.getDoctorName());
@@ -83,6 +93,32 @@ public class Converters {
             return ratings.stream()
                     .map(DoctorRatingConverter::convert)
                     .collect(Collectors.toList());
+        }
+    }
+
+    public static class FacilityConverter {
+
+        private FacilityConverter() {
+        }
+
+        public static Facility convert(FacilityDtoRequest request) {
+            return new Facility(
+                    request.getName(),
+                    request.getType(),
+                    request.getDoctors().stream().map(d -> new Facility.Practitioner(d.getRegId(), d.getRegId())).collect(Collectors.toList()),
+                    Arrays.asList(new Facility.Admin(request.getAdmin().getEmail(), request.getAdmin().getName())),
+                    new Location(request.getLongitude(), request.getLatitude())
+            );
+        }
+
+        public static FacilityDtoResponse convert(Facility facility) {
+            return new FacilityDtoResponse(
+                    facility.getId(),
+                    facility.getName(),
+                    facility.getType(),
+                    facility.getDoctors().stream().map(d -> new FacilityDto.Practitioner(d.getRegId(), d.getRegId())).collect(Collectors.toList()),
+                    facility.getAdmins().stream().map(u -> new FacilityDto.Admin(u.getEmail(), u.getName())).collect(Collectors.toList())
+            );
         }
     }
 }

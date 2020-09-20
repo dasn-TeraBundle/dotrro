@@ -4,34 +4,34 @@ import com.innova.doctrro.common.constants.DBExceptionType;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-public final class DoctorDBExceptionFactory {
+public final class FacilityDBExceptionFactory {
 
-    private DoctorDBExceptionFactory() { }
+    private FacilityDBExceptionFactory() { }
 
     public static RuntimeException createException(DBExceptionType dbExceptionType) {
         switch (dbExceptionType) {
             case DATA_NOT_FOUND:
-                return new DoctorNotFoundException();
+                return new FacilityNotFoundException();
             case DUPLICATE_KEY:
-                return new DuplicateDoctorException();
+                return new DuplicateFacilityException();
             default:
                 return new RuntimeException("Something went wrong");
         }
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public static class DoctorNotFoundException extends RuntimeException {
+    public static class FacilityNotFoundException extends RuntimeException {
 
-        private DoctorNotFoundException() {
-            super("Doctor Not Found");
+        private FacilityNotFoundException() {
+            super("Facility Not Found");
         }
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public static class DuplicateDoctorException extends RuntimeException {
+    public static class DuplicateFacilityException extends RuntimeException {
 
-        private DuplicateDoctorException() {
-            super("Doctor already exists. You may consider updating it");
+        private DuplicateFacilityException() {
+            super("Facility already exists. You may consider updating it");
         }
     }
 }

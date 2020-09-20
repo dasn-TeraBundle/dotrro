@@ -14,6 +14,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+    private static final String ROOT = "/doctor-service";
+
     private final UserServiceClient userServiceClient;
 
     @Autowired
@@ -25,10 +27,13 @@ public class SecurityConfig {
     public SecurityWebFilterChain pringSecurityFilterChain(ServerHttpSecurity http) throws Exception {
         http
                 .authorizeExchange()
-                .pathMatchers("/doctor-service/doctors/reg-id/**").permitAll()
-                .pathMatchers(HttpMethod.GET, "/doctor-service/doctors/").permitAll()
-                .pathMatchers("/doctor-service/doc-ratings/doc/**").permitAll()
-                .pathMatchers("/doctor-service/doc-ratings/doc-avg/**").permitAll()
+                .pathMatchers(ROOT + "/doctors/reg-id/**").permitAll()
+                .pathMatchers(HttpMethod.GET, ROOT + "/doctors/").permitAll()
+                .pathMatchers(ROOT + "/doc-ratings/doc/**").permitAll()
+                .pathMatchers(ROOT + "/doc-ratings/doc-avg/**").permitAll()
+                .pathMatchers(ROOT + "/facility/me").authenticated()
+                .pathMatchers(HttpMethod.GET,ROOT + "/facility/**").permitAll()
+                .pathMatchers(HttpMethod.GET,ROOT + "/facility/").permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .oauth2ResourceServer()
