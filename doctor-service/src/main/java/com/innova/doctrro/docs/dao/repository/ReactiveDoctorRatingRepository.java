@@ -15,7 +15,7 @@ public interface ReactiveDoctorRatingRepository extends ReactiveMongoRepository<
     @Query(sort = "{createdDate: -1}")
     Flux<DoctorRating> findAllByRatedBy_Email(String email);
 
-    @Query(value = "{doctor.regId: ?0}", fields = "{id: 0, rating: 1}")
+    @Query(value = "{'doctor.regId': ?0}", fields = "{id: 0, rating: 1}")
     Flux<DoctorRating> findAllRatingByDoctor_RegId(String regId);
 
 }

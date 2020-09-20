@@ -47,7 +47,7 @@ public class DoctorController {
                 });
     }
 
-    @GetMapping("/reg-id/{regId}")
+    @GetMapping("/{regId}")
     public Mono<DoctorDtoResponse> find(@PathVariable String regId) {
         return reactiveDoctorService.findById(regId);
     }

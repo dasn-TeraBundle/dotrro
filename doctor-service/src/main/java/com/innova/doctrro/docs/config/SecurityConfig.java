@@ -27,11 +27,15 @@ public class SecurityConfig {
     public SecurityWebFilterChain pringSecurityFilterChain(ServerHttpSecurity http) throws Exception {
         http
                 .authorizeExchange()
-                .pathMatchers(ROOT + "/doctors/reg-id/**").permitAll()
+
+                .pathMatchers(ROOT + "/**/me").authenticated()
+
+                .pathMatchers(HttpMethod.GET, ROOT + "/doctors/**").permitAll()
                 .pathMatchers(HttpMethod.GET, ROOT + "/doctors/").permitAll()
-                .pathMatchers(ROOT + "/doc-ratings/doc/**").permitAll()
-                .pathMatchers(ROOT + "/doc-ratings/doc-avg/**").permitAll()
-                .pathMatchers(ROOT + "/facility/me").authenticated()
+
+                .pathMatchers(ROOT + "/doc-ratings/**").permitAll()
+                .pathMatchers(ROOT + "/doc-ratings/avg/**").permitAll()
+
                 .pathMatchers(HttpMethod.GET,ROOT + "/facility/**").permitAll()
                 .pathMatchers(HttpMethod.GET,ROOT + "/facility/").permitAll()
                 .anyExchange().authenticated()

@@ -35,12 +35,12 @@ public class DoctorRatingController {
                 }).flatMap(doctorRatingService::create);
     }
 
-    @GetMapping("/doc/{regId}")
+    @GetMapping("/{regId}")
     public Flux<DoctorRatingDtoResponse> findAllByDoctorRegId(@PathVariable String regId) {
         return doctorRatingService.findAllByDoctorRegId(regId);
     }
 
-    @GetMapping("/doc-avg/{regId}")
+    @GetMapping("/avg/{regId}")
     public Mono<Double> findAverageRatingByDoctorRegId(@PathVariable String regId) {
         return doctorRatingService.findAverageRatingByDoctorRegId(regId);
     }
