@@ -68,6 +68,16 @@
             <groupId>com.innova.doctrro</groupId>
             <artifactId>common</artifactId>
             <version>1.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-oauth2-resource-server</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.nimbusds</groupId>
+                    <artifactId>oauth2-oidc-sdk</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- TESTING -->
