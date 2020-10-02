@@ -10,13 +10,13 @@ spring:
 #      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 #      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
-  security:
-    oauth2:
-      resourceserver:
-        opaquetoken:
-          client-id: 689062928154-pogk4e8v44f7lhl89pon5t8m3cd2hgel.apps.googleusercontent.com
-          client-secret: 9spkQdl0AawztpxoEYA7yEJu
-          introspection-uri: https://www.googleapis.com/oauth2/v3/userinfo
+#  security:
+#    oauth2:
+#      resourceserver:
+#        opaquetoken:
+#          client-id: 689062928154-pogk4e8v44f7lhl89pon5t8m3cd2hgel.apps.googleusercontent.com
+#          client-secret: 9spkQdl0AawztpxoEYA7yEJu
+#          introspection-uri: https://www.googleapis.com/oauth2/v3/userinfo
 
 
 server:
@@ -24,5 +24,5 @@ server:
 
 logging:
   level:
-    root: INFO
+    root: ERROR
     com.innova: DEBUG

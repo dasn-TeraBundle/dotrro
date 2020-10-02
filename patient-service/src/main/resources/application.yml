@@ -5,19 +5,17 @@ spring:
     mongodb:
       database: patient
   kafka:
-#    consumer:
-#      bootstrap-servers: localhost:9092
     producer:
       bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-  security:
-    oauth2:
-      resourceserver:
-        opaquetoken:
-          client-secret: id
-          client-id: sec
-          introspection-uri: https://www.googleapis.com/oauth2/v3/userinfo
+#  security:
+#    oauth2:
+#      resourceserver:
+#        opaquetoken:
+#          client-secret: id
+#          client-id: sec
+#          introspection-uri: https://www.googleapis.com/oauth2/v3/userinfo
 
 server:
   port: 8021

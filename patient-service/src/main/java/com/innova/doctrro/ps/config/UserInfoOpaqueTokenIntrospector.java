@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -28,14 +29,16 @@ public class UserInfoOpaqueTokenIntrospector implements ReactiveOpaqueTokenIntro
     public Mono<OAuth2AuthenticatedPrincipal> introspect(String token) {
         return this.delegate.introspect(token)
                 .flatMap(principal -> {
-                    Map<String, Object> attributes = principal.getAttributes();
-                    return userServiceClient.getRoles(principal.getAttributes().get("email").toString())
-                            .map(roles -> {
+                    Map<String, Object> attributes = new HashMap<>(principal.getAttributes());
+                    return userServiceClient.getOrCreate("Bearer " + token)
+                            .map(userDtoResponse -> {
+                                var roles = userDtoResponse.getRoles();
+                                attributes.put("name", userDtoResponse.getName());
                                 Collection<GrantedAuthority> authorities = new ArrayList<>();
                                 roles.stream().map(SimpleGrantedAuthority::new).forEach(authorities::add);
-                                return authorities;
+
+                                return new DefaultOAuth2AuthenticatedPrincipal(attributes, authorities);
                             })
-                            .map(roles -> new DefaultOAuth2AuthenticatedPrincipal(attributes, roles))
                             .map(p -> (OAuth2AuthenticatedPrincipal) p);
                 })
                 .onErrorMap((e) -> {
