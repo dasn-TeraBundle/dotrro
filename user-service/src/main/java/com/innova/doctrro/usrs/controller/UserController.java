@@ -6,7 +6,6 @@ import com.innova.doctrro.usrs.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -17,8 +16,6 @@ import java.util.Set;
 
 import static com.innova.doctrro.common.dto.UserDto.UserDtoRequest;
 import static com.innova.doctrro.common.dto.UserDto.UserDtoResponse;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_STREAM_JSON_VALUE;
 
 
 @RestController
@@ -38,17 +35,17 @@ public class UserController {
 
     @GetMapping(value = "/me")
     public UserDtoResponse getOrCreate(BearerTokenAuthentication auth) {
-            System.out.println(auth.getToken().getTokenValue());
-            Map<String, Object> details = auth.getTokenAttributes();
-            var req = new UserDtoRequest(details.get("email").toString(), details.get("name").toString(), roles);
+        System.out.println(auth.getToken().getTokenValue());
+        Map<String, Object> details = auth.getTokenAttributes();
+        var req = new UserDtoRequest(details.get("email").toString(), details.get("name").toString(), roles);
 
-            return userService.findOrCreate(req.getEmail(), req);
+        return userService.findOrCreate(req.getEmail(), req);
     }
 
-    @GetMapping(value = "/roles/{email}", produces = APPLICATION_JSON_VALUE)
-    public Set<String> getRoles(@PathVariable String email) {
-        return userService.findById(email).getRoles();
-    }
+//    @GetMapping(value = "/roles/{email}", produces = APPLICATION_JSON_VALUE)
+//    public Set<String> getRoles(@PathVariable String email) {
+//        return userService.findById(email).getRoles();
+//    }
 
     @GetMapping(value = "/v2/me")
     public Mono<UserDtoResponse> getOrCreate(Mono<BearerTokenAuthentication> auth) {
@@ -62,9 +59,9 @@ public class UserController {
         }).log();
     }
 
-    @GetMapping(value = "/v2/roles/{email}", produces = APPLICATION_JSON_VALUE)
-    public Set<String> getRolesV2(@PathVariable String email) {
-        return reactiveUserService.findById(email).block().getRoles();
-    }
+//    @GetMapping(value = "/v2/roles/{email}", produces = APPLICATION_JSON_VALUE)
+//    public Set<String> getRolesV2(@PathVariable String email) {
+//        return reactiveUserService.findById(email).block().getRoles();
+//    }
 
 }
