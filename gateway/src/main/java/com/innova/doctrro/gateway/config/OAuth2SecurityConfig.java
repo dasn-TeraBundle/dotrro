@@ -34,6 +34,7 @@ public class OAuth2SecurityConfig {
     public SecurityWebFilterChain pringSecurityFilterChain(ServerHttpSecurity http) throws Exception {
         http
                 .authorizeExchange()
+                .pathMatchers("/search-service/**").permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .oauth2Login()
