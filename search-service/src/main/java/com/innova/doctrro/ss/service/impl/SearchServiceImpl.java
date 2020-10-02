@@ -40,11 +40,13 @@ public class SearchServiceImpl implements SearchService {
                 .map(Facility.Practitioner::getRegId)
                 .distinct()
                 .collectList()
-                .map(ids -> {
-                    System.out.println(ids);
-                    return ids;
+                .flatMapMany(ids -> {
+                    if (speciality == null) {
+                        return doctorDao.findAllByRegIdIn(ids);
+                    } else {
+                        return doctorDao.findAllByRegIdInAndSpeciality(ids, speciality);
+                    }
                 })
-                .flatMapMany(doctorDao::findAllByRegIdIn)
                 .map(Converters::convert)
                 .flatMap(d ->
                         Flux.combineLatest(

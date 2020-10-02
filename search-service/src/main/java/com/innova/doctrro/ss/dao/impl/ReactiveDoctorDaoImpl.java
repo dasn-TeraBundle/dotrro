@@ -39,6 +39,11 @@ public class ReactiveDoctorDaoImpl implements ReactiveDoctorDao {
     }
 
     @Override
+    public Flux<Doctor> findAllByRegIdInAndSpeciality(List<String> regIds, String speciality) {
+        return doctorRepository.findAllByRegIdInAndAbout_Speciality(regIds, speciality);
+    }
+
+    @Override
     public Flux<Doctor> findAll() {
         return doctorRepository.findAll();
     }

@@ -10,4 +10,5 @@ import java.util.List;
 public interface ReactiveDoctorDao extends ReactiveGenericDao<Doctor, String> {
 
     Flux<Doctor> findAllByRegIdIn(List<String> regIds);
+    Flux<Doctor> findAllByRegIdInAndSpeciality(List<String> regIds, String speciality);
 }

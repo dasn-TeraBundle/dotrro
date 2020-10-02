@@ -36,7 +36,7 @@ public class Converters {
     public static FacilityDtoResponse convert(Facility facility) {
         List<Practitioner> practitioners = facility.getDoctors()
                 .stream()
-                .map(d -> new Practitioner(d.getRegId(), d.getRegId()))
+                .map(d -> new Practitioner(d.getRegId(), d.getName()))
                 .collect(Collectors.toList());
 
         return new FacilityDtoResponse(
