@@ -1,7 +1,7 @@
 package com.innova.doctrro.docs.dao;
 
 
-import com.innova.doctrro.docs.beans.Doctor;
+import com.innova.doctrro.common.beans.Doctor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

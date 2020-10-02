@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: search-service
+  data:
+    mongodb:
+      database: doctor
+
+server:
+  port: 8041
+
+logging:
+  level:
+    root: INFO
+    com.innova: DEBUG
+    org.springframework.data.mongodb: DEBUG
+

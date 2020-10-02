@@ -1,7 +1,6 @@
 package com.innova.doctrro.docs.dao.repository;
 
-import com.google.inject.internal.cglib.proxy.$FixedValue;
-import com.innova.doctrro.docs.beans.Facility;
+import com.innova.doctrro.common.beans.Facility;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;

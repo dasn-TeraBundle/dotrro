@@ -1,6 +1,6 @@
 package com.innova.doctrro.docs.service.impl;
 
-import com.innova.doctrro.docs.beans.DoctorRating;
+import com.innova.doctrro.common.beans.DoctorRating;
 import com.innova.doctrro.docs.dao.ReactiveDoctorRatingDao;
 import com.innova.doctrro.docs.service.ReactiveDoctorRatingService;
 import org.springframework.beans.factory.annotation.Autowired;

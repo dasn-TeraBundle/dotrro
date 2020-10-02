@@ -1,7 +1,7 @@
 package com.innova.doctrro.docs.dao;
 
 import com.innova.doctrro.common.dao.ReactiveGenericDao;
-import com.innova.doctrro.docs.beans.DoctorRating;
+import com.innova.doctrro.common.beans.DoctorRating;
 import reactor.core.publisher.Flux;
 
 public interface ReactiveDoctorRatingDao extends ReactiveGenericDao<DoctorRating, String> {

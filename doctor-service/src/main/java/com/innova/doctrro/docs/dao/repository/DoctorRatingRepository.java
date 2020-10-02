@@ -1,6 +1,6 @@
 package com.innova.doctrro.docs.dao.repository;
 
-import com.innova.doctrro.docs.beans.DoctorRating;
+import com.innova.doctrro.common.beans.DoctorRating;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
