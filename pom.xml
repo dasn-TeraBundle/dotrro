@@ -36,6 +36,7 @@
         <module>patient-service</module>
         <module>doctor-service</module>
         <module>search-service</module>
+        <module>booking-service</module>
     </modules>
 
     <dependencies>
