@@ -9,8 +9,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -64,6 +66,7 @@ public class Facility implements Serializable {
     public static class Practitioner implements Serializable {
         private String regId;
         private String name;
+        private Set<Slot> slots;
 
         @Override
         public boolean equals(Object o) {
@@ -78,6 +81,38 @@ public class Facility implements Serializable {
         @Override
         public int hashCode() {
             return regId.hashCode();
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class Slot implements Serializable {
+            private DayOfWeek dayOfWeek;
+            private String startTime;
+            private String endTime;
+            private byte duration;
+            private boolean isAutoApproveEnabled;
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+
+                Slot slot = (Slot) o;
+
+                if (dayOfWeek != slot.dayOfWeek) return false;
+                if (!startTime.equals(slot.startTime)) return false;
+                return endTime.equals(slot.endTime);
+            }
+
+            @Override
+            public int hashCode() {
+                int result = dayOfWeek.hashCode();
+                result = 31 * result + startTime.hashCode();
+                result = 31 * result + endTime.hashCode();
+                return result;
+            }
         }
     }
 

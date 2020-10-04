@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ public class FacilityDtoResponse {
     private String id;
     private String name;
     private String type;
-    private Set<Practitioner> practitioners;
+    private List<Practitioner> practitioners;
 
     @Getter
     @Setter
@@ -27,6 +28,7 @@ public class FacilityDtoResponse {
         private float experience;
         private String degree;
         private String speciality;
+        private List<Slot> slots;
 
         public Practitioner(String regId, String name) {
             this.regId = regId;
@@ -47,5 +49,15 @@ public class FacilityDtoResponse {
         public int hashCode() {
             return regId.hashCode();
         }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class Slot {
+            private LocalDateTime startTime;
+            private LocalDateTime endTime;
+        }
+
     }
 }

@@ -9,7 +9,9 @@ import lombok.Setter;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.util.List;
 
 public class FacilityDto {
@@ -56,8 +58,30 @@ public class FacilityDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Practitioner {
+        @NotNull
         private String regId;
+        @NotNull
         private String name;
+        @NotNull
+        @Size(min = 1)
+        private List<Slot> slots;
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class Slot {
+            @NotNull
+            private DayOfWeek dayOfWeek;
+            @NotNull
+            private String startTime;
+            @NotNull
+            private String endTime;
+            @NotNull
+            private byte duration;
+            @NotNull
+            private boolean isAutoApproveEnabled;
+        }
     }
 
     @Getter

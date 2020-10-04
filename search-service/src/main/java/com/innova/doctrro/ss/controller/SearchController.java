@@ -5,11 +5,9 @@ import com.innova.doctrro.ss.dto.DoctorDtoResponse;
 import com.innova.doctrro.ss.dto.FacilityDtoResponse;
 import com.innova.doctrro.ss.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/search-service")
@@ -27,6 +25,12 @@ public class SearchController {
                                             @RequestParam(value = "lon") double longitude,
                                             @RequestParam(value = "radius") int radius) {
         return searchService.search(latitude, longitude, radius);
+    }
+
+    @GetMapping("/facility/{fid}/doctor/{regId}")
+    public Mono<FacilityDtoResponse> getAllSlots(@PathVariable String fid,
+                                                 @PathVariable String regId) {
+        return searchService.findAllBookingSlots(fid, regId);
     }
 
     @GetMapping("/doctor")
