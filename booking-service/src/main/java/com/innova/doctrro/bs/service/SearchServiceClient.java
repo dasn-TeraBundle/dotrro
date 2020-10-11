@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 @ReactiveFeignClient("search-service")
 public interface SearchServiceClient {
 
-    @GetMapping("/facility/{fid}/doctor/{regId}")
+    @GetMapping("/search-service/facility/{fid}/doctor/{regId}")
     Mono<FacilityDtoResponse> getAllSlots(@PathVariable(value = "fid") String fid,
                                           @PathVariable(value = "regId") String regId);
 }

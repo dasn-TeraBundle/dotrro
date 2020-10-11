@@ -112,6 +112,7 @@ public class Converters {
                                         slot.getStartTime(),
                                         slot.getEndTime(),
                                         slot.getDuration(),
+                                        slot.getFee(),
                                         slot.isAutoApproveEnabled()
                                 ))
                                 .collect(Collectors.toList());
@@ -138,6 +139,7 @@ public class Converters {
                                         slot.getStartTime(),
                                         slot.getEndTime(),
                                         slot.getDuration(),
+                                        slot.getFee(),
                                         slot.isAutoApproveEnabled()
                                 ))
                                 .collect(Collectors.toList());

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
+
 
 @Component
 public class BookingDaoImpl implements BookingDao {
@@ -21,36 +23,36 @@ public class BookingDaoImpl implements BookingDao {
 
     @Override
     public Booking create(Booking item) {
-        return null;
+        return bookingRepository.insert(item);
     }
 
     @Override
     public Booking findById(String s) {
-        return null;
+        return bookingRepository.findById(s).orElse(null);
     }
 
     @Override
     public List<Booking> findAll() {
-        return null;
+        return bookingRepository.findAll();
     }
 
     @Override
     public Booking update(String s, Booking item) {
-        return null;
+        return bookingRepository.save(item);
     }
 
     @Override
     public void remove(String s) {
-
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override
     public void remove(Booking item) {
-
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override
     public void remove() {
-
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 }

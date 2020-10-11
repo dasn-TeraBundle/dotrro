@@ -57,6 +57,8 @@ public class FacilityDtoResponse {
         public static class Slot {
             private LocalDateTime startTime;
             private LocalDateTime endTime;
+            private double fee;
+            private boolean autoApproveEnabled;
         }
 
     }

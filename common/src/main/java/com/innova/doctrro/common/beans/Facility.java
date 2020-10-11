@@ -92,6 +92,7 @@ public class Facility implements Serializable {
             private String startTime;
             private String endTime;
             private byte duration;
+            private double fee;
             private boolean isAutoApproveEnabled;
 
             @Override

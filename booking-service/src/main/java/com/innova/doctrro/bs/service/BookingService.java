@@ -9,6 +9,7 @@ import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoResponse;
 
 public interface BookingService extends GenericService<BookingDtoRequest, BookingDtoResponse, String> {
 
+    boolean lockSlot(String slotId, String email);
     BookingDtoResponse update(String bookingId, BookingStatus status);
     void update(String bookingId, PaymentStatus status);
 }

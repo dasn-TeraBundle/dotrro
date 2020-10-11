@@ -27,6 +27,8 @@ public class Booking {
     private LocalDateTime endTime;
     private BookingStatus status;
 
+    private double cost;
+
     @Version
     private long version;
 

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -41,8 +42,10 @@ public class BookingDto {
         private String slotId;
         private Facility facility;
         private Practitioner practioner;
-        private LocalDateTime startTime;
+        private LocalDateTime appointmentTime;
+        @JsonIgnore
         private LocalDateTime endTime;
+        private double cost;
         private BookingStatus status;
 
         @Getter

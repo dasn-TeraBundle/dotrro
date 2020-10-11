@@ -80,6 +80,8 @@ public class FacilityDto {
             @NotNull
             private byte duration;
             @NotNull
+            private double fee;
+            @NotNull
             private boolean isAutoApproveEnabled;
         }
     }

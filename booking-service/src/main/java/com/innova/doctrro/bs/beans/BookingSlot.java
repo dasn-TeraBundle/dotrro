@@ -20,12 +20,20 @@ public class BookingSlot {
 
     @Id
     private String id;
+
     private String facilityId;
+    private String facilityName;
+
     private String doctorId;
+    private String doctorName;
+
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private boolean bookingEnabled;
     private SlotStatus status;
+
+    private double charge;
+    private boolean autoApproveEnabled;
 
     @Version
     private long version;

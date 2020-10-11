@@ -5,7 +5,6 @@ import com.innova.doctrro.bs.beans.BookingSlot;
 import com.innova.doctrro.bs.beans.BookingStatus;
 import com.innova.doctrro.bs.beans.SlotStatus;
 import com.innova.doctrro.bs.dao.BookingDao;
-import static com.innova.doctrro.bs.dto.BookingDto.*;
 import com.innova.doctrro.bs.service.BookingService;
 import com.innova.doctrro.bs.service.BookingSlotService;
 import com.innova.doctrro.common.constants.PaymentStatus;
@@ -13,24 +12,34 @@ import com.innova.doctrro.common.exception.InvalidInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.innova.doctrro.bs.service.Converters.*;
-
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoRequest;
+import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoResponse;
+import static com.innova.doctrro.bs.service.Converters.BookingConverter;
 
 @Service
 public class BookingServiceImpl implements BookingService {
 
     private final BookingDao bookingDao;
     private final BookingSlotService bookingSlotService;
-    private final Map<String, String> lockedSlots = new HashMap<>();
+    private final Map<String, String> lockedSlots = new ConcurrentHashMap<>();
 
     @Autowired
     public BookingServiceImpl(BookingDao bookingDao, BookingSlotService bookingSlotService) {
         this.bookingDao = bookingDao;
         this.bookingSlotService = bookingSlotService;
+    }
+
+    @Override
+    public boolean lockSlot(String slotId, String email) {
+        String r = lockedSlots.putIfAbsent(slotId, email);
+        System.out.println(email + " " + r + " " + slotId);
+        if (r == null) return true;
+        return email.equals(r);  //TODO - Replace with Redis call
     }
 
     @Override
@@ -51,6 +60,10 @@ public class BookingServiceImpl implements BookingService {
                 bookingSlotService.update(slot.getId(), slot);
 
                 booking.setStatus(BookingStatus.INITIATED);
+                booking.getFacility().setName(slot.getFacilityName());
+                booking.getPractioner().setName(slot.getDoctorName());
+                booking.setCost(slot.getCharge());
+                lockedSlots.remove(slot.getId());  //TODO - Replace with Redis call
                 return BookingConverter.convert(bookingDao.create(booking));
             } else {
                 throw new InvalidInputException("Selected slot is currently not available.");
@@ -84,7 +97,11 @@ public class BookingServiceImpl implements BookingService {
                     slot.setStatus(SlotStatus.BOOKED);
                     bookingSlotService.update(slot.getId(), slot);
 
-                    booking.setStatus(BookingStatus.CONFIRMED);
+                    if (slot.isAutoApproveEnabled()) {
+                        booking.setStatus(BookingStatus.CONFIRMED);
+                    } else {
+                        booking.setStatus(BookingStatus.PENDING_APPROVAL);
+                    }
                     return BookingConverter.convert(bookingDao.update(booking.getId(), booking));
                 } else {
                     return null;
