@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 
@@ -29,6 +31,16 @@ public class BookingDaoImpl implements BookingDao {
     @Override
     public Booking findById(String s) {
         return bookingRepository.findById(s).orElse(null);
+    }
+
+    @Override
+    public Supplier<Stream<Booking>> findAllByBookedUserEmail(String email) {
+        return () -> bookingRepository.findAllByBookedBy_Email(email);
+    }
+
+    @Override
+    public Supplier<Stream<Booking>> findAllByPractitionerRegId(String regId) {
+        return () -> bookingRepository.findAllByPractioner_RegId(regId);
     }
 
     @Override

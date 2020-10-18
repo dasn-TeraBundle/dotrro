@@ -12,4 +12,5 @@ logging:
   level:
     root: INFO
     com.innova: DEBUG
+    org.springframework.data.mongodb: DEBUG
 

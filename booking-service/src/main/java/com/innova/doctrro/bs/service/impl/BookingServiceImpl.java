@@ -7,6 +7,7 @@ import com.innova.doctrro.bs.beans.SlotStatus;
 import com.innova.doctrro.bs.dao.BookingDao;
 import com.innova.doctrro.bs.service.BookingService;
 import com.innova.doctrro.bs.service.BookingSlotService;
+import com.innova.doctrro.bs.service.DoctorServiceClient;
 import com.innova.doctrro.common.constants.PaymentStatus;
 import com.innova.doctrro.common.exception.InvalidInputException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoRequest;
 import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoResponse;
@@ -26,12 +28,14 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingDao bookingDao;
     private final BookingSlotService bookingSlotService;
+    private final DoctorServiceClient doctorServiceClient;
     private final Map<String, String> lockedSlots = new ConcurrentHashMap<>();
 
     @Autowired
-    public BookingServiceImpl(BookingDao bookingDao, BookingSlotService bookingSlotService) {
+    public BookingServiceImpl(BookingDao bookingDao, BookingSlotService bookingSlotService, DoctorServiceClient doctorServiceClient) {
         this.bookingDao = bookingDao;
         this.bookingSlotService = bookingSlotService;
+        this.doctorServiceClient = doctorServiceClient;
     }
 
     @Override
@@ -73,7 +77,29 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDtoResponse findById(String s) {
-        return null;
+        return BookingConverter.convert(bookingDao.findById(s));
+    }
+
+    @Override
+    public List<BookingDtoResponse> findAllByBookeUserEmail(String email) {
+        return bookingDao.findAllByBookedUserEmail(email)
+                .get()
+                .map(BookingConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookingDtoResponse> findAllByPractitionerId(String regId) {
+        return bookingDao.findAllByPractitionerRegId(regId)
+                .get()
+                .map(BookingConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookingDtoResponse> findAllByPractitionerEmail(String token) {
+        var doctorDtoResp = doctorServiceClient.find(token).block();
+        return findAllByPractitionerId(doctorDtoResp.getRegId());
     }
 
     @Override

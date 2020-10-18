@@ -9,6 +9,7 @@ import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class BookingDto {
@@ -36,7 +37,7 @@ public class BookingDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class BookingDtoResponse {
+    public static class BookingDtoResponse implements Serializable {
         private String id;
         private User bookedBy;
         private String slotId;
@@ -52,7 +53,7 @@ public class BookingDto {
         @Setter
         @NoArgsConstructor
         @AllArgsConstructor
-        public static class Facility {
+        public static class Facility implements Serializable {
             private String id;
             private String name;
         }
@@ -61,7 +62,7 @@ public class BookingDto {
         @Setter
         @NoArgsConstructor
         @AllArgsConstructor
-        public static class Practitioner {
+        public static class Practitioner implements Serializable {
             private String regId;
             private String name;
         }
@@ -71,7 +72,7 @@ public class BookingDto {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class User {
+    public static class User implements Serializable {
         private String email;
         private String name;
     }
