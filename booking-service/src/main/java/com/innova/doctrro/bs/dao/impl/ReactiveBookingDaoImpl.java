@@ -32,6 +32,16 @@ public class ReactiveBookingDaoImpl implements ReactiveBookingDao {
     }
 
     @Override
+    public Flux<Booking> findAllByBookedUserEmail(String email) {
+        return bookingRepository.findAllByBookedBy_Email(email);
+    }
+
+    @Override
+    public Flux<Booking> findAllByPractitionerRegId(String regId) {
+        return bookingRepository.findAllByPractioner_RegId(regId);
+    }
+
+    @Override
     public Flux<Booking> findAll() {
         return bookingRepository.findAll();
     }

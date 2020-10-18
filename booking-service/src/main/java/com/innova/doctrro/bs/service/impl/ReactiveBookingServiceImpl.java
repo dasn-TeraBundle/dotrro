@@ -6,10 +6,7 @@ import com.innova.doctrro.bs.beans.BookingStatus;
 import com.innova.doctrro.bs.beans.SlotStatus;
 import com.innova.doctrro.bs.dao.BookingDao;
 import com.innova.doctrro.bs.dao.ReactiveBookingDao;
-import com.innova.doctrro.bs.service.BookingService;
-import com.innova.doctrro.bs.service.BookingSlotService;
-import com.innova.doctrro.bs.service.ReactiveBookingService;
-import com.innova.doctrro.bs.service.ReactiveBookingSlotService;
+import com.innova.doctrro.bs.service.*;
 import com.innova.doctrro.common.constants.PaymentStatus;
 import com.innova.doctrro.common.exception.InvalidInputException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +29,14 @@ public class ReactiveBookingServiceImpl implements ReactiveBookingService {
 
     private final ReactiveBookingDao bookingDao;
     private final ReactiveBookingSlotService bookingSlotService;
+    private final DoctorServiceClient doctorServiceClient;
     private final Map<String, String> lockedSlots = new ConcurrentHashMap<>();
 
     @Autowired
-    public ReactiveBookingServiceImpl(ReactiveBookingDao bookingDao, ReactiveBookingSlotService bookingSlotService) {
+    public ReactiveBookingServiceImpl(ReactiveBookingDao bookingDao, ReactiveBookingSlotService bookingSlotService, DoctorServiceClient doctorServiceClient) {
         this.bookingDao = bookingDao;
         this.bookingSlotService = bookingSlotService;
+        this.doctorServiceClient = doctorServiceClient;
     }
 
     @Override
@@ -84,7 +83,26 @@ public class ReactiveBookingServiceImpl implements ReactiveBookingService {
 
     @Override
     public Mono<BookingDtoResponse> findById(String s) {
-        return null;
+        return bookingDao.findById(s)
+                .map(BookingConverter::convert);
+    }
+
+    @Override
+    public Flux<BookingDtoResponse> findAllByBookeUserEmail(String email) {
+        return bookingDao.findAllByBookedUserEmail(email)
+                .map(BookingConverter::convert);
+    }
+
+    @Override
+    public Flux<BookingDtoResponse> findAllByPractitionerId(String regId) {
+        return bookingDao.findAllByPractitionerRegId(regId)
+                .map(BookingConverter::convert);
+    }
+
+    @Override
+    public Flux<BookingDtoResponse> findAllByPractitionerEmail(String token) {
+        return doctorServiceClient.find(token)
+                .flatMapMany(doctor -> findAllByPractitionerId(doctor.getRegId()));
     }
 
     @Override
