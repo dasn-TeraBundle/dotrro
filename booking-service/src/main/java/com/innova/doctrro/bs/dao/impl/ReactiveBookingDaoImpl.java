@@ -1,12 +1,15 @@
 package com.innova.doctrro.bs.dao.impl;
 
 import com.innova.doctrro.bs.beans.Booking;
+import com.innova.doctrro.bs.beans.BookingStatus;
 import com.innova.doctrro.bs.dao.ReactiveBookingDao;
 import com.innova.doctrro.bs.dao.repository.ReactiveBookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
 
 import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 
@@ -39,6 +42,11 @@ public class ReactiveBookingDaoImpl implements ReactiveBookingDao {
     @Override
     public Flux<Booking> findAllByPractitionerRegId(String regId) {
         return bookingRepository.findAllByPractioner_RegId(regId);
+    }
+
+    @Override
+    public Flux<Booking> findAllByStatusAndCreatedOnBefore(BookingStatus status, LocalDateTime time) {
+        return bookingRepository.findAllByStatusAndCreatedOnBefore(status, time);
     }
 
     @Override

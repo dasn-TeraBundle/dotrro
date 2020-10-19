@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -29,6 +31,10 @@ public class Booking {
 
     private double cost;
 
+    @CreatedDate
+    private LocalDateTime createdOn;
+    @LastModifiedDate
+    private LocalDateTime updatedOn;
     @Version
     private long version;
 
