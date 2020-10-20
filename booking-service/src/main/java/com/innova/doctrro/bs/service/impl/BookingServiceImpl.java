@@ -5,12 +5,17 @@ import com.innova.doctrro.bs.beans.BookingSlot;
 import com.innova.doctrro.bs.beans.BookingStatus;
 import com.innova.doctrro.bs.beans.SlotStatus;
 import com.innova.doctrro.bs.dao.BookingDao;
+import com.innova.doctrro.bs.exception.BookingDBExceptionFactory;
+import com.innova.doctrro.bs.exception.BookingSlotDBExceptionFactory;
 import com.innova.doctrro.bs.service.BookingService;
 import com.innova.doctrro.bs.service.BookingSlotService;
 import com.innova.doctrro.bs.service.DoctorServiceClient;
+import static com.innova.doctrro.common.constants.DBExceptionType.*;
 import com.innova.doctrro.common.constants.PaymentStatus;
 import com.innova.doctrro.common.exception.InvalidInputException;
+import com.innova.doctrro.common.exception.UnauthorizedAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +27,7 @@ import java.util.stream.Collectors;
 import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoRequest;
 import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoResponse;
 import static com.innova.doctrro.bs.service.Converters.BookingConverter;
+import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -61,7 +67,11 @@ public class BookingServiceImpl implements BookingService {
             }
             if (slot.getStatus() == SlotStatus.AVAILABLE) {
                 slot.setStatus(SlotStatus.LOCKED);
-                bookingSlotService.update(slot.getId(), slot);
+                try {
+                    bookingSlotService.update(slot.getId(), slot);
+                } catch (OptimisticLockingFailureException ex) {
+                    throw BookingSlotDBExceptionFactory.createException(OPTIMISTIC_LOCKING_FAILURE);
+                }
 
                 booking.setStatus(BookingStatus.INITIATED);
                 booking.getFacility().setName(slot.getFacilityName());
@@ -77,7 +87,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDtoResponse findById(String s) {
-        return BookingConverter.convert(bookingDao.findById(s));
+        Booking booking = bookingDao.findById(s);
+        if (booking == null) {
+            throw BookingDBExceptionFactory.createException(DATA_NOT_FOUND);
+        }
+
+        return BookingConverter.convert(booking);
     }
 
     @Override
@@ -103,13 +118,58 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public BookingDtoResponse cancelByPatient(String bookingId, String email) {
+        Booking booking = bookingDao.findById(bookingId);
+        if (booking == null) {
+            throw BookingDBExceptionFactory.createException(DATA_NOT_FOUND);
+        }
+        BookingSlot slot = bookingSlotService.findById(booking.getSlotId());
+
+        if (booking.getBookedBy().getEmail().equals(email)) {
+            if (slot.getStatus() == SlotStatus.BOOKED && booking.getStatus() == BookingStatus.CONFIRMED) {
+                slot.setStatus(SlotStatus.AVAILABLE);
+                bookingSlotService.update(slot.getId(), slot);
+
+                booking.setStatus(BookingStatus.CANCELLED);
+                return BookingConverter.convert(bookingDao.update(booking.getId(), booking));
+            } else {
+                throw new InvalidInputException("Booking must be in CONFIRMED state for cancellation");
+            }
+        }
+
+        throw new UnauthorizedAccessException();
+    }
+
+    @Override
+    public BookingDtoResponse cancelByDoctor(String bookingId, String token) {
+        Booking booking = bookingDao.findById(bookingId);
+        BookingSlot slot = bookingSlotService.findById(booking.getSlotId());
+        var doctorDtoResp = doctorServiceClient.find(token).block();
+
+        if (booking.getPractioner().getRegId().equals(doctorDtoResp.getRegId())) {
+            if ((slot.getStatus() == SlotStatus.BOOKED && booking.getStatus() == BookingStatus.CONFIRMED) ||
+                    (!slot.isAutoApproveEnabled() && booking.getStatus() == BookingStatus.PENDING_APPROVAL) ) {
+                slot.setStatus(SlotStatus.AVAILABLE);
+                bookingSlotService.update(slot.getId(), slot);
+
+                booking.setStatus(BookingStatus.CANCELLED);
+                return BookingConverter.convert(bookingDao.update(booking.getId(), booking));
+            } else {
+                throw new InvalidInputException("Booking must be in CONFIRMED or PENDING_APPROVAL state for cancellation");
+            }
+        }
+
+        throw new UnauthorizedAccessException();
+    }
+
+    @Override
     public List<BookingDtoResponse> findAll() {
-        return null;
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override
     public BookingDtoResponse update(String s, BookingDtoRequest item) {
-        return null;
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override
@@ -173,16 +233,16 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void remove(String s) {
-
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override
     public void remove(BookingDtoRequest item) {
-
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override
     public void remove() {
-
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 }

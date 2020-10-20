@@ -25,13 +25,13 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final ReactiveBookingService reactiveBookingService;
-    private final BookingSlotService bookingSlotService;
+//    private final BookingSlotService bookingSlotService;
 
     @Autowired
-    public BookingController(BookingService bookingService, ReactiveBookingService reactiveBookingService, BookingSlotService bookingSlotService) {
+    public BookingController(BookingService bookingService, ReactiveBookingService reactiveBookingService/*, BookingSlotService bookingSlotService*/) {
         this.bookingService = bookingService;
         this.reactiveBookingService = reactiveBookingService;
-        this.bookingSlotService = bookingSlotService;
+//        this.bookingSlotService = bookingSlotService;
     }
 
     @PostMapping("/")
@@ -52,11 +52,11 @@ public class BookingController {
         return bookingService.lockSlot(slotId, details.get("email").toString());
     }
 
-    @GetMapping("/")
-    @Deprecated
-    public void createSlots() {
-        bookingSlotService.create(new ArrayList<>());
-    }
+//    @GetMapping("/")
+//    @Deprecated
+//    public void createSlots() {
+//        bookingSlotService.create(new ArrayList<>());
+//    }
 
     @GetMapping("/patients/me")
     public List<BookingDtoResponse> findMyBookings_Patient(BearerTokenAuthentication auth) {
@@ -83,6 +83,21 @@ public class BookingController {
         return auth.map(BearerTokenAuthentication::getToken)
                 .map(t -> "Bearer " + t.getTokenValue())
                 .flatMapMany(reactiveBookingService::findAllByPractitionerEmail);
+    }
+
+    @PatchMapping("/cancel/patients/{bookingId}")
+    public BookingDtoResponse cancel_Patient(BearerTokenAuthentication auth,
+                                                           @PathVariable String bookingId) {
+        Map<String, Object> details = auth.getTokenAttributes();
+        String email = details.get("email").toString();
+
+        return bookingService.cancelByPatient(bookingId, email);
+    }
+
+    @PatchMapping("/cancel/doctors/{bookingId}")
+    public BookingDtoResponse cancel_Doctor(BearerTokenAuthentication auth,
+                                                          @PathVariable String bookingId) {
+        return bookingService.cancelByDoctor(bookingId, "Bearer " + auth.getToken().getTokenValue());
     }
 
 }

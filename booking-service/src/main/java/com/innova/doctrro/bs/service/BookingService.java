@@ -12,9 +12,14 @@ import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoResponse;
 public interface BookingService extends GenericService<BookingDtoRequest, BookingDtoResponse, String> {
 
     boolean lockSlot(String slotId, String email);
+
     List<BookingDtoResponse> findAllByBookeUserEmail(String email);
     List<BookingDtoResponse> findAllByPractitionerId(String regId);
     List<BookingDtoResponse> findAllByPractitionerEmail(String email);
+
+    BookingDtoResponse cancelByPatient(String bookingId, String email);
+    BookingDtoResponse cancelByDoctor(String bookingId, String token);
+
     BookingDtoResponse update(String bookingId, BookingStatus status);
     void update(String bookingId, PaymentStatus status);
 }
