@@ -1,4 +1,4 @@
-package com.innova.doctrro.ss.dto;
+package com.innova.doctrro.bs.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

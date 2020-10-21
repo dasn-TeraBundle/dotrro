@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: booking-service
+  data:
+    mongodb:
+      database: bookings
+
+server:
+  port: 8051
+
+logging:
+  level:
+    root: INFO
+    com.innova: DEBUG
+    org.springframework.data.mongodb: DEBUG
+
+booking:
+  scheduler.createTimeThreshold: 30
+

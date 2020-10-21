@@ -6,6 +6,7 @@ import com.innova.doctrro.common.beans.DoctorRating;
 import com.innova.doctrro.common.beans.Facility;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,21 +103,55 @@ public class Converters {
         }
 
         public static Facility convert(FacilityDtoRequest request) {
+            var doctors = request.getDoctors().stream()
+                    .map(d -> {
+                        var slots = d.getSlots()
+                                .stream()
+                                .map(slot -> new Facility.Practitioner.Slot(
+                                        slot.getDayOfWeek(),
+                                        slot.getStartTime(),
+                                        slot.getEndTime(),
+                                        slot.getDuration(),
+                                        slot.getFee(),
+                                        slot.isAutoApproveEnabled()
+                                ))
+                                .collect(Collectors.toList());
+                        return new Facility.Practitioner(d.getRegId(), d.getRegId(), new LinkedHashSet<>(slots));
+                    })
+                    .collect(Collectors.toList());
+
             return new Facility(
                     request.getName(),
                     request.getType(),
-                    request.getDoctors().stream().map(d -> new Facility.Practitioner(d.getRegId(), d.getRegId())).collect(Collectors.toList()),
+                    doctors,
                     Arrays.asList(new Facility.Admin(request.getAdmin().getEmail(), request.getAdmin().getName())),
                     new Location(request.getLongitude(), request.getLatitude())
             );
         }
 
         public static FacilityDtoResponse convert(Facility facility) {
+            var doctors = facility.getDoctors().stream()
+                    .map(d -> {
+                        var slots = d.getSlots()
+                                .stream()
+                                .map(slot -> new FacilityDto.Practitioner.Slot(
+                                        slot.getDayOfWeek(),
+                                        slot.getStartTime(),
+                                        slot.getEndTime(),
+                                        slot.getDuration(),
+                                        slot.getFee(),
+                                        slot.isAutoApproveEnabled()
+                                ))
+                                .collect(Collectors.toList());
+                        return new FacilityDto.Practitioner(d.getRegId(), d.getRegId(), slots);
+                    })
+                    .collect(Collectors.toList());
+
             return new FacilityDtoResponse(
                     facility.getId(),
                     facility.getName(),
                     facility.getType(),
-                    facility.getDoctors().stream().map(d -> new FacilityDto.Practitioner(d.getRegId(), d.getRegId())).collect(Collectors.toList()),
+                    doctors,
                     facility.getAdmins().stream().map(u -> new FacilityDto.Admin(u.getEmail(), u.getName())).collect(Collectors.toList())
             );
         }

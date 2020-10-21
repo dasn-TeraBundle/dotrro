@@ -43,6 +43,6 @@ public class Converters {
                 facility.getId(),
                 facility.getName(),
                 facility.getType(),
-                new HashSet<>(practitioners));
+                practitioners);
     }
 }
