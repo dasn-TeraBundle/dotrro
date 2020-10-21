@@ -4,6 +4,7 @@ import com.innova.doctrro.bs.beans.BookingSlot;
 import com.innova.doctrro.bs.beans.SlotStatus;
 import com.innova.doctrro.bs.dao.BookingSlotDao;
 import com.innova.doctrro.bs.dao.ReactiveBookingSlotDao;
+import com.innova.doctrro.bs.exception.BookingSlotDBExceptionFactory;
 import com.innova.doctrro.bs.service.BookingSlotService;
 import com.innova.doctrro.bs.service.ReactiveBookingSlotService;
 import com.innova.doctrro.bs.service.SearchServiceClient;
@@ -15,6 +16,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.innova.doctrro.common.constants.DBExceptionType.DATA_NOT_FOUND;
 import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 
 
@@ -64,13 +66,13 @@ public class ReactiveBookingSlotServiceImpl implements ReactiveBookingSlotServic
     @Override
     public Mono<BookingSlot> findById(String s) {
         return bookingSlotDao.findById(s)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new RuntimeException("Invalid slot id"))))
+                .switchIfEmpty(Mono.defer(() -> Mono.error(BookingSlotDBExceptionFactory.createException(DATA_NOT_FOUND))))
                 .map(slot -> slot);
     }
 
     @Override
     public Flux<BookingSlot> findAll() {
-        return null;
+        return Flux.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }
 
     @Override

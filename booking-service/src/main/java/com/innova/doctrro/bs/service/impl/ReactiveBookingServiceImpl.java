@@ -1,27 +1,32 @@
 package com.innova.doctrro.bs.service.impl;
 
 import com.innova.doctrro.bs.beans.Booking;
-import com.innova.doctrro.bs.beans.BookingSlot;
 import com.innova.doctrro.bs.beans.BookingStatus;
 import com.innova.doctrro.bs.beans.SlotStatus;
-import com.innova.doctrro.bs.dao.BookingDao;
 import com.innova.doctrro.bs.dao.ReactiveBookingDao;
-import com.innova.doctrro.bs.service.*;
+import com.innova.doctrro.bs.exception.BookingDBExceptionFactory;
+import com.innova.doctrro.bs.exception.BookingSlotDBExceptionFactory;
+import com.innova.doctrro.bs.service.DoctorServiceClient;
+import com.innova.doctrro.bs.service.ReactiveBookingService;
+import com.innova.doctrro.bs.service.ReactiveBookingSlotService;
 import com.innova.doctrro.common.constants.PaymentStatus;
 import com.innova.doctrro.common.exception.InvalidInputException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoRequest;
 import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoResponse;
 import static com.innova.doctrro.bs.service.Converters.BookingConverter;
+import static com.innova.doctrro.common.constants.DBExceptionType.DATA_NOT_FOUND;
+import static com.innova.doctrro.common.constants.DBExceptionType.OPTIMISTIC_LOCKING_FAILURE;
 import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 
 @Service
@@ -77,13 +82,22 @@ public class ReactiveBookingServiceImpl implements ReactiveBookingService {
                         booking.setCost(slot.getCharge());
                         lockedSlots.remove(slot.getId());  //TODO - Replace with Redis call
                         return bookingDao.create(booking);
-                    }).map(BookingConverter::convert);
+                    })
+                    .map(BookingConverter::convert)
+                    .onErrorMap(err -> {
+                        if (err instanceof OptimisticLockingFailureException) {
+                            return BookingSlotDBExceptionFactory.createException(OPTIMISTIC_LOCKING_FAILURE);
+                        }
+
+                        return err;
+                    });
         }
     }
 
     @Override
     public Mono<BookingDtoResponse> findById(String s) {
         return bookingDao.findById(s)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(BookingDBExceptionFactory.createException(DATA_NOT_FOUND))))
                 .map(BookingConverter::convert);
     }
 
@@ -95,7 +109,7 @@ public class ReactiveBookingServiceImpl implements ReactiveBookingService {
 
     @Override
     public Flux<BookingDtoResponse> findAllByPractitionerId(String regId) {
-        return bookingDao.findAllByPractitionerRegId(regId)
+        return bookingDao.findAllByPractitionerRegId(regId, Arrays.asList(BookingStatus.INITIATED, BookingStatus.FAILED))
                 .map(BookingConverter::convert);
     }
 
@@ -107,12 +121,12 @@ public class ReactiveBookingServiceImpl implements ReactiveBookingService {
 
     @Override
     public Flux<BookingDtoResponse> findAll() {
-        return null;
+        return Flux.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }
 
     @Override
     public Mono<BookingDtoResponse> update(String s, BookingDtoRequest item) {
-        return null;
+        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }
 
     @Override

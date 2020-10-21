@@ -10,6 +10,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 
@@ -40,8 +41,8 @@ public class ReactiveBookingDaoImpl implements ReactiveBookingDao {
     }
 
     @Override
-    public Flux<Booking> findAllByPractitionerRegId(String regId) {
-        return bookingRepository.findAllByPractioner_RegId(regId);
+    public Flux<Booking> findAllByPractitionerRegId(String regId, List<BookingStatus> statuses) {
+        return bookingRepository.findAllByPractioner_RegIdAndStatusNotIn(regId, statuses);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.innova.doctrro.bs.dao.impl;
 
 import com.innova.doctrro.bs.beans.Booking;
+import com.innova.doctrro.bs.beans.BookingStatus;
 import com.innova.doctrro.bs.dao.BookingDao;
 import com.innova.doctrro.bs.dao.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,8 @@ public class BookingDaoImpl implements BookingDao {
     }
 
     @Override
-    public Supplier<Stream<Booking>> findAllByPractitionerRegId(String regId) {
-        return () -> bookingRepository.findAllByPractioner_RegId(regId);
+    public Supplier<Stream<Booking>> findAllByPractitionerRegId(String regId, List<BookingStatus> statuses) {
+        return () -> bookingRepository.findAllByPractioner_RegIdAndStatusNotIn(regId, statuses);
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.innova.doctrro.common.constants.DBExceptionType.DATA_NOT_FOUND;
+import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 
 
 @Service
@@ -71,7 +72,7 @@ public class BookingSlotServiceImpl implements BookingSlotService {
 
     @Override
     public List<BookingSlot> findAll() {
-        return null;
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override
@@ -81,16 +82,16 @@ public class BookingSlotServiceImpl implements BookingSlotService {
 
     @Override
     public void remove(String s) {
-
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override
     public void remove(BookingSlot item) {
-
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override
     public void remove() {
-
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 }

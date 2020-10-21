@@ -10,7 +10,6 @@ import com.innova.doctrro.bs.exception.BookingSlotDBExceptionFactory;
 import com.innova.doctrro.bs.service.BookingService;
 import com.innova.doctrro.bs.service.BookingSlotService;
 import com.innova.doctrro.bs.service.DoctorServiceClient;
-import static com.innova.doctrro.common.constants.DBExceptionType.*;
 import com.innova.doctrro.common.constants.PaymentStatus;
 import com.innova.doctrro.common.exception.InvalidInputException;
 import com.innova.doctrro.common.exception.UnauthorizedAccessException;
@@ -19,6 +18,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoRequest;
 import static com.innova.doctrro.bs.dto.BookingDto.BookingDtoResponse;
 import static com.innova.doctrro.bs.service.Converters.BookingConverter;
+import static com.innova.doctrro.common.constants.DBExceptionType.DATA_NOT_FOUND;
+import static com.innova.doctrro.common.constants.DBExceptionType.OPTIMISTIC_LOCKING_FAILURE;
 import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 
 @Service
@@ -105,7 +107,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDtoResponse> findAllByPractitionerId(String regId) {
-        return bookingDao.findAllByPractitionerRegId(regId)
+        return bookingDao.findAllByPractitionerRegId(regId, Arrays.asList(BookingStatus.INITIATED, BookingStatus.FAILED))
                 .get()
                 .map(BookingConverter::convert)
                 .collect(Collectors.toList());
@@ -148,7 +150,7 @@ public class BookingServiceImpl implements BookingService {
 
         if (booking.getPractioner().getRegId().equals(doctorDtoResp.getRegId())) {
             if ((slot.getStatus() == SlotStatus.BOOKED && booking.getStatus() == BookingStatus.CONFIRMED) ||
-                    (!slot.isAutoApproveEnabled() && booking.getStatus() == BookingStatus.PENDING_APPROVAL) ) {
+                    (!slot.isAutoApproveEnabled() && booking.getStatus() == BookingStatus.PENDING_APPROVAL)) {
                 slot.setStatus(SlotStatus.AVAILABLE);
                 bookingSlotService.update(slot.getId(), slot);
 
