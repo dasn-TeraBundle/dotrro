@@ -49,6 +49,12 @@ spring:
             - Path=/booking-service/**
           filters:
             - TokenRelay=
+        - id: payment-servicre
+          uri: lb://payment-service
+          predicates:
+            - Path=/payment-service/**
+          filters:
+            - TokenRelay=
 
 
 logging:

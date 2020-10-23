@@ -1,6 +1,7 @@
 package com.innova.doctrro.common.constants;
 
-public enum PaymentMode {
+public enum PaymentGateway {
     CASH,
-    CARD
+    STRIPE,
+    RAZORPAY
 }

@@ -12,7 +12,7 @@ public class PaymentConverter {
         payment.setBookingId(request.getBookingId());
         payment.setSlotId(request.getSlotId());
         payment.setPaymentGateway(request.getPaymentGateway());
-        payment.setPaymentMode(request.getPaymentMode());
+//        payment.setPaymentMode(request.getPaymentMode());
         payment.setPromo(request.getPromo());
 
         return payment;

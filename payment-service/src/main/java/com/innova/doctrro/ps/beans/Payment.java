@@ -1,6 +1,7 @@
 package com.innova.doctrro.ps.beans;
 
 
+import com.innova.doctrro.common.constants.PaymentGateway;
 import com.innova.doctrro.common.constants.PaymentStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +25,9 @@ public class Payment {
     private String id;
     private String bookingId;
     private String slotId;
-    private String paymentGateway;
-    private String paymentMode;
+    private PaymentGateway paymentGateway;
+    private String paymentGatewayOrderId;
+//    private String paymentMode;
     private String referenceNo;
     private double cost;
     private String promo;

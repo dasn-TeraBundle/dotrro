@@ -10,6 +10,6 @@ import reactor.core.publisher.Mono;
 @ReactiveFeignClient("booking-service")
 public interface BookingServiceClient {
 
-    @GetMapping(value = "/booking-service/{id}")
-    Mono<BookingDtoResponse> getOrCreate(@PathVariable(value = "id") String id);
+    @GetMapping(value = "/booking-service/booking/{id}")
+    Mono<BookingDtoResponse> find(@PathVariable(value = "id") String id);
 }

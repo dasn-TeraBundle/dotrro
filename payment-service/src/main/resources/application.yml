@@ -17,6 +17,10 @@ spring:
 #          client-id: sec
 #          introspection-uri: https://www.googleapis.com/oauth2/v3/userinfo
 
+feign:
+  httpclient:
+    connection-timeout: 10000
+
 server:
   port: 8061
 
@@ -25,4 +29,3 @@ logging:
   level:
     root: INFO
     com.innova: DEBUG
-

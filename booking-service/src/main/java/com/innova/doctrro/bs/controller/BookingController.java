@@ -58,6 +58,11 @@ public class BookingController {
 //        bookingSlotService.create(new ArrayList<>());
 //    }
 
+    @GetMapping("/booking/{id}")
+    public Mono<BookingDtoResponse> find(@PathVariable String id) {
+        return reactiveBookingService.findById(id);
+    }
+
     @GetMapping("/patients/me")
     public List<BookingDtoResponse> findMyBookings_Patient(BearerTokenAuthentication auth) {
         Map<String, Object> details = auth.getTokenAttributes();

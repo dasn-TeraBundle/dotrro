@@ -1,6 +1,8 @@
 package com.innova.doctrro.ps.dto;
 
+import com.innova.doctrro.common.constants.PaymentGateway;
 import com.innova.doctrro.common.constants.PaymentStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,9 +22,9 @@ public class PaymentDto {
         @NotNull
         private String slotId;
         @NotNull
-        private String paymentGateway;
-        @NotNull
-        private String paymentMode;
+        private PaymentGateway paymentGateway;
+//        @NotNull
+//        private String paymentMode;
 //        private double cost;
         private String promo;
 //        private double discount;
@@ -52,6 +54,22 @@ public class PaymentDto {
     @Getter
     @Setter
     @NoArgsConstructor
+    public static class PaymentChargeRequest {
+        @NotNull
+        private String id;
+        @NotNull
+        private String bookingId;
+        @NotNull
+        private PaymentGateway gateway;
+        private String razorpayPaymentId;
+        private String razorpayOrderId;
+        private String razorpaySignature;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class User {
         private String email;
         private String name;
