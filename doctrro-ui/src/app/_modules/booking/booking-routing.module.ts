@@ -5,7 +5,7 @@ import {BookingComponent, HomeComponent, SearchComponent} from './_components/';
 const routes: Routes = [
   {
     path: '', component: HomeComponent, children: [
-      {path: 'book/fid/:fid/did/:did', component: BookingComponent},
+      // {path: 'book/fid/:fid/did/:did', component: BookingComponent},
       {path: 'book', component: BookingComponent},
       {path: '', component: SearchComponent}
     ]

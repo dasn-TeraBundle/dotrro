@@ -10,5 +10,9 @@
   "/search-service/*": {
     "target": "http://localhost:8041/",
     "secure": false
+  },
+  "/booking-service/*": {
+    "target": "http://localhost:8051/",
+    "secure": false
   }
 }
