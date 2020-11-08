@@ -26,6 +26,7 @@ public class SecurityConfig {
         http
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.GET, "/booking-service/booking/**").permitAll()
+                .pathMatchers(HttpMethod.GET, "/booking-service/slot/**").permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .oauth2ResourceServer()

@@ -27,11 +27,11 @@ public class SearchController {
         return searchService.search(latitude, longitude, radius);
     }
 
-    @GetMapping("/facility/{fid}/doctor/{regId}")
-    public Mono<FacilityDtoResponse> getAllSlots(@PathVariable String fid,
-                                                 @PathVariable String regId) {
-        return searchService.findAllBookingSlots(fid, regId);
-    }
+//    @GetMapping("/facility/{fid}/doctor/{regId}")
+//    public Mono<FacilityDtoResponse> getAllSlots(@PathVariable String fid,
+//                                                 @PathVariable String regId) {
+//        return searchService.findAllBookingSlots(fid, regId);
+//    }
 
     @GetMapping("/doctor")
     public Flux<DoctorDtoResponse> search(@RequestParam(value = "lat") double latitude,
