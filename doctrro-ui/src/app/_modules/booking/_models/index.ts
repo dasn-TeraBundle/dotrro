@@ -1,3 +1,3 @@
-export {SearchCriteria} from "./search-criteria";
+export {SearchFilters} from "./search-filters";
 export {Location} from "./location";
 export {DoctorSearchResponse} from './doctor-search-response';

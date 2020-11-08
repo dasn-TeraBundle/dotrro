@@ -1,6 +1,6 @@
 import {Action, createReducer, on, State} from '@ngrx/store';
 import * as DoctorActions from './doctors.action';
-import {DoctorSearchResponse} from '../../_models';
+import {DoctorSearchResponse} from '../../../_models';
 
 const initialState: DoctorSearchResponse[] = [];
 

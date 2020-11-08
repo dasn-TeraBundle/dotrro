@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {EMPTY} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
-import {SearchService} from '../../_services/search.service';
+import {SearchService} from '../../../_services/search.service';
 import {fetchDoctors, updateDoctors} from './doctors.action';
 
 

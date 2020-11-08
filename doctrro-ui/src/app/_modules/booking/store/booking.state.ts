@@ -1,11 +1,15 @@
-import {DoctorSearchResponse, SearchCriteria} from '../_models';
+import {DoctorSearchResponse, SearchFilters} from '../_models';
 import {createSelector} from '@ngrx/store';
 import {selectFeatureBooking} from '../../../store/state';
 
-export interface BookingState {
-  srchCriteria: SearchCriteria;
+export interface SearchState {
+  filters: SearchFilters;
   doctors: DoctorSearchResponse[];
 }
 
-export const selectSearchCriteria = createSelector(selectFeatureBooking, state => state.srchCriteria);
-export const selectDoctors = createSelector(selectFeatureBooking, state => state.doctors);
+export interface BookingState {
+  search: SearchState;
+}
+
+export const selectSearchFilters = createSelector(selectFeatureBooking, state => state.search.filters);
+export const selectDoctors = createSelector(selectFeatureBooking, state => state.search.doctors);

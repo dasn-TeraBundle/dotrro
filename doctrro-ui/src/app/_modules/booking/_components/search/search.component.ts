@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {DoctorSearchResponse, SearchCriteria} from "../../_models";
+import {DoctorSearchResponse, SearchFilters} from "../../_models";
 import {SearchService} from "../../_services/search.service";
 import {Observable} from "rxjs";
 import {Store} from "@ngrx/store";
-import {getSearchCriteria, updateSearchCriteria} from "../../store/search/search.action";
-import {selectDoctors, selectSearchCriteria} from "../../store/booking.state";
-import {fetchDoctors, updateDoctors} from "../../store/doctors/doctors.action";
+import {getSearchCriteria, updateSearchCriteria} from "../../store/search/filters/search-filter.action";
+import {selectDoctors, selectSearchFilters} from "../../store/booking.state";
+import {fetchDoctors, updateDoctors} from "../../store/search/doctors/doctors.action";
 
 @Component({
   selector: 'app-search',
@@ -14,7 +14,7 @@ import {fetchDoctors, updateDoctors} from "../../store/doctors/doctors.action";
 })
 export class SearchComponent implements OnInit, OnDestroy {
 
-  criteria: SearchCriteria;
+  criteria: SearchFilters;
   doctors$: Observable<DoctorSearchResponse[]>;
 
   private criteriaSub: any;
@@ -25,10 +25,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.criteriaSub = this.store.select(selectSearchCriteria).subscribe(criteria => {
+    this.criteriaSub = this.store.select(selectSearchFilters).subscribe(criteria => {
       console.log(criteria);
       if (criteria === undefined) {
-        const cr = new SearchCriteria();
+        const cr = new SearchFilters();
         cr.loc.lat = -73.9667;
         cr.loc.lon = 40.78;
         cr.radius = 5;

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import {DoctorSearchResponse, SearchCriteria} from '../../_models';
+import {DoctorSearchResponse, SearchFilters} from '../../../_models';
 
 export const getDoctors = createAction(
   '[DOCTORS] GET'
@@ -7,7 +7,7 @@ export const getDoctors = createAction(
 
 export const fetchDoctors = createAction(
   '[DOCTORS] FETCH',
-  props<{ criteria: SearchCriteria }>()
+  props<{ criteria: SearchFilters }>()
 );
 
 export const updateDoctors = createAction(

@@ -1,6 +1,6 @@
 import {Location} from "./location";
 
-export class SearchCriteria {
+export class SearchFilters {
   loc: Location;
   radius: number;
   speciality: string;

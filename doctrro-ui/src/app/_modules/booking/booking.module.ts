@@ -6,14 +6,12 @@ import {FormsModule} from "@angular/forms";
 import {SharedMaterialModule} from "../shared/shared-material/shared-material.module";
 import {HttpClientModule} from "@angular/common/http";
 import {SearchService} from "./_services/search.service";
-import * as fromSearchCriteria from './store/search/search.reducer';
-import * as fromDoctors from './store/doctors/doctors.reducer';
 import {StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
-import {DoctorsEffects} from "./store/doctors/doctors.effects";
+import {DoctorsEffects} from "./store/search/doctors/doctors.effects";
 import { DoctorComponent } from './_components/doctor/doctor.component';
 import {StarRatingModule} from 'angular-star-rating';
-
+import * as fromSearchReducer from './store/search/search.reducer';
 
 
 @NgModule({
@@ -26,8 +24,7 @@ import {StarRatingModule} from 'angular-star-rating';
     StarRatingModule.forRoot(),
 
     StoreModule.forFeature('booking',{
-      srchCriteria: fromSearchCriteria.reducer,
-      doctors: fromDoctors.reducer
+      search: fromSearchReducer.reducer
     }),
     EffectsModule.forFeature([DoctorsEffects]),
 
