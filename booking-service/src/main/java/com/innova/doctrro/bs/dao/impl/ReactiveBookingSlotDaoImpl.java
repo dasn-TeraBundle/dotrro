@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
@@ -36,6 +37,11 @@ public class ReactiveBookingSlotDaoImpl implements ReactiveBookingSlotDao {
     @Override
     public Mono<BookingSlot> findById(String s) {
         return slotRepository.findById(s);
+    }
+
+    @Override
+    public Flux<BookingSlot> findAllFutureByFacilityIdAndDoctorId(String facilityId, String doctorId, LocalDateTime time) {
+        return slotRepository.findAllByFacilityIdAndDoctorIdAndAndStartTimeAfter(facilityId, doctorId, time);
     }
 
     @Override

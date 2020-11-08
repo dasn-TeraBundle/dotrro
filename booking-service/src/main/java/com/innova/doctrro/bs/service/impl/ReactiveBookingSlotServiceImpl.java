@@ -2,10 +2,8 @@ package com.innova.doctrro.bs.service.impl;
 
 import com.innova.doctrro.bs.beans.BookingSlot;
 import com.innova.doctrro.bs.beans.SlotStatus;
-import com.innova.doctrro.bs.dao.BookingSlotDao;
 import com.innova.doctrro.bs.dao.ReactiveBookingSlotDao;
 import com.innova.doctrro.bs.exception.BookingSlotDBExceptionFactory;
-import com.innova.doctrro.bs.service.BookingSlotService;
 import com.innova.doctrro.bs.service.ReactiveBookingSlotService;
 import com.innova.doctrro.bs.service.SearchServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,6 +67,12 @@ public class ReactiveBookingSlotServiceImpl implements ReactiveBookingSlotServic
         return bookingSlotDao.findById(s)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(BookingSlotDBExceptionFactory.createException(DATA_NOT_FOUND))))
                 .map(slot -> slot);
+    }
+
+    @Override
+    public Flux<BookingSlot> findAllFutureSLotsByFacilityIdAndDoctorId(String facilityId, String doctorId) {
+        var now = LocalDateTime.now();
+        return bookingSlotDao.findAllFutureByFacilityIdAndDoctorId(facilityId, doctorId, now);
     }
 
     @Override

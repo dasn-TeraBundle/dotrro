@@ -1,5 +1,6 @@
 package com.innova.doctrro.ss.service.impl;
 
+import com.innova.doctrro.common.beans.Doctor;
 import com.innova.doctrro.common.beans.Facility;
 import com.innova.doctrro.ss.dao.ReactiveDoctorDao;
 import com.innova.doctrro.ss.dao.ReactiveDoctorRatingDao;
@@ -20,6 +21,8 @@ import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -91,18 +94,49 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Flux<DoctorDtoResponse> search(double latitude, double longitude, int radius, String speciality) {
         return facilityDao.findAllWithinDistance(longitude, latitude, radius * 1000)
-                .flatMapIterable(Facility::getDoctors)
-                .map(Facility.Practitioner::getRegId)
-                .distinct()
-                .collectList()
-                .flatMapMany(ids -> {
-                    if (speciality == null) {
-                        return doctorDao.findAllByRegIdIn(ids);
-                    } else {
-                        return doctorDao.findAllByRegIdInAndSpeciality(ids, speciality);
-                    }
+                .flatMapIterable(f -> {
+                    return f.getDoctors().stream().map(d -> {
+                        var dr = new DoctorDtoResponse();
+                        dr.setRegId(d.getRegId());
+
+                        var clinic = new DoctorDtoResponse.Clinic();
+                        clinic.setId(f.getId());
+                        clinic.setName(f.getName());
+                        clinic.setType(f.getType());
+
+                        dr.setClinics(new HashSet<DoctorDtoResponse.Clinic>());
+                        dr.getClinics().add(clinic);
+
+                        return dr;
+                    }).collect(Collectors.toList());
                 })
-                .map(Converters::convert)
+//                .map(Facility.Practitioner::getRegId)
+//                .distinct()
+                .collectList()
+                .flatMapMany(doctors -> {
+                    List<String> ids = doctors.stream().map(DoctorDtoResponse::getRegId).distinct().collect(Collectors.toList());
+                    Flux<Doctor> fluxDoctors;
+                    if (speciality == null) {
+                        fluxDoctors = doctorDao.findAllByRegIdIn(ids);
+                    } else {
+                        fluxDoctors = doctorDao.findAllByRegIdInAndSpeciality(ids, speciality);
+                    }
+
+                    return Flux.combineLatest(
+                            Flux.just(doctors),
+                            fluxDoctors,
+                            (docs, doc) -> {
+                                var resp = Converters.convert(doc);
+                                var clinics = docs.stream()
+                                        .filter(d -> d.getRegId().equals(doc.getRegId()))
+                                        .flatMap(d -> d.getClinics().stream())
+                                        .collect(Collectors.toSet());
+                                resp.setClinics(clinics);
+                                return resp;
+                            }
+                    );
+                })
+//                .map(Converters::convert)
                 .flatMap(d ->
                         Flux.combineLatest(
                                 Flux.just(d),
