@@ -1,6 +1,5 @@
-package com.innova.doctrro.docs.service.impl;
+package com.innova.doctrro.common.dto;
 
-import com.innova.doctrro.common.dto.Event;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-class NewSlotEvent extends Event {
+public class NewSlotEvent extends Event {
     private String facilityId;
     private String facilityName;
 

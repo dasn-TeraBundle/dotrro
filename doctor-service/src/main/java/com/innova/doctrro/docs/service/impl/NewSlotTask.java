@@ -2,6 +2,7 @@ package com.innova.doctrro.docs.service.impl;
 
 
 import com.innova.doctrro.common.dto.FacilityDto;
+import com.innova.doctrro.common.dto.NewSlotEvent;
 import com.innova.doctrro.common.service.KafkaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
