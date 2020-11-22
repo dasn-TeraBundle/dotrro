@@ -4,16 +4,21 @@ import com.innova.doctrro.docs.dao.ReactiveFacilityDao;
 import com.innova.doctrro.docs.exception.FacilityDBExceptionFactory;
 import com.innova.doctrro.docs.service.ReactiveFacilityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import static com.innova.doctrro.common.constants.DBExceptionType.DATA_NOT_FOUND;
 import static com.innova.doctrro.common.constants.DBExceptionType.DUPLICATE_KEY;
 import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
-import static com.innova.doctrro.common.dto.FacilityDto.FacilityDtoRequest;
-import static com.innova.doctrro.common.dto.FacilityDto.FacilityDtoResponse;
+import static com.innova.doctrro.common.dto.FacilityDto.*;
 import static com.innova.doctrro.docs.service.Converters.FacilityConverter;
 
 
@@ -21,10 +26,26 @@ import static com.innova.doctrro.docs.service.Converters.FacilityConverter;
 public class ReactiveFacilityServiceImpl implements ReactiveFacilityService {
 
     private final ReactiveFacilityDao facilityDao;
+    private ExecutorService executorService;
 
     @Autowired
     public ReactiveFacilityServiceImpl(ReactiveFacilityDao facilityDao) {
         this.facilityDao = facilityDao;
+    }
+
+    @Lookup
+    NewSlotTask getNewSlotTask(FacilityDtoResponse dtoResponse, Practitioner practitioner) {
+        return null;
+    }
+
+    @PostConstruct
+    private void init() {
+        executorService = Executors.newCachedThreadPool();
+    }
+
+    @PreDestroy
+    private void cleanup() {
+        executorService.shutdown();
     }
 
     @Override
@@ -32,6 +53,13 @@ public class ReactiveFacilityServiceImpl implements ReactiveFacilityService {
         return Mono.just(FacilityConverter.convert(item))
                 .flatMap(facilityDao::create)
                 .map(FacilityConverter::convert)
+                .doOnSuccess(dtoResp -> {
+                    dtoResp.getDoctors()
+                            .forEach(doctor -> {
+                                Runnable task = getNewSlotTask(dtoResp, doctor);
+                                executorService.submit(task);
+                            });
+                })
                 .onErrorMap(ex -> {
                     if (ex instanceof DuplicateKeyException)
                         return FacilityDBExceptionFactory.createException(DUPLICATE_KEY);
