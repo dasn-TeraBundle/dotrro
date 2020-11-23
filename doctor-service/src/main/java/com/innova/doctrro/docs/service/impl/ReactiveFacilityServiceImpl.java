@@ -2,6 +2,7 @@ package com.innova.doctrro.docs.service.impl;
 
 import com.innova.doctrro.docs.dao.ReactiveFacilityDao;
 import com.innova.doctrro.docs.exception.FacilityDBExceptionFactory;
+import com.innova.doctrro.docs.service.NewSlotTask;
 import com.innova.doctrro.docs.service.ReactiveFacilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
@@ -34,7 +35,7 @@ public class ReactiveFacilityServiceImpl implements ReactiveFacilityService {
     }
 
     @Lookup
-    NewSlotTask getNewSlotTask(FacilityDtoResponse dtoResponse, Practitioner practitioner) {
+    NewSlotTask getNewSlotTask(FacilityDtoResponse dtoResponse, Practitioner practitioner, boolean init) {
         return null;
     }
 
@@ -56,7 +57,7 @@ public class ReactiveFacilityServiceImpl implements ReactiveFacilityService {
                 .doOnSuccess(dtoResp -> {
                     dtoResp.getDoctors()
                             .forEach(doctor -> {
-                                Runnable task = getNewSlotTask(dtoResp, doctor);
+                                Runnable task = getNewSlotTask(dtoResp, doctor, true);
                                 executorService.submit(task);
                             });
                 })

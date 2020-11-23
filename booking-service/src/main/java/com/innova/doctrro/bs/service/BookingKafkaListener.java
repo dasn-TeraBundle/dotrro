@@ -9,6 +9,7 @@ import com.innova.doctrro.common.dto.NewSlotEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -53,11 +54,16 @@ class BookingKafkaListener {
 
                         return slot;
                     }).collect(Collectors.toList());
+
             bookingSlotService.create(slots)
                     .subscribe(slot -> {
                         LOGGER.info("Created slot {}", slot.getId());
                     }, err -> {
-                        LOGGER.error("Error creating slot", err);
+                        if (!(err instanceof DuplicateKeyException)) {
+                            LOGGER.error("Error creating slot", err);
+                        } else {
+                            LOGGER.error("Slots already created earlier");
+                        }
                     });
         } catch (JsonProcessingException e) {
             LOGGER.error("Error while processing", e);
