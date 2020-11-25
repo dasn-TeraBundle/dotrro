@@ -1,2 +1,0 @@
-export {PatientRequest} from "./patient";
-
