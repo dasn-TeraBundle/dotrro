@@ -116,7 +116,7 @@ public class Converters {
                                         slot.isAutoApproveEnabled()
                                 ))
                                 .collect(Collectors.toList());
-                        return new Facility.Practitioner(d.getRegId(), d.getRegId(), new LinkedHashSet<>(slots));
+                        return new Facility.Practitioner(d.getRegId(), d.getName(), new LinkedHashSet<>(slots));
                     })
                     .collect(Collectors.toList());
 
@@ -143,7 +143,7 @@ public class Converters {
                                         slot.isAutoApproveEnabled()
                                 ))
                                 .collect(Collectors.toList());
-                        return new FacilityDto.Practitioner(d.getRegId(), d.getRegId(), slots);
+                        return new FacilityDto.Practitioner(d.getRegId(), d.getName(), slots);
                     })
                     .collect(Collectors.toList());
 
