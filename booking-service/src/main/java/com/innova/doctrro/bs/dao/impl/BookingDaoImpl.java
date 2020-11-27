@@ -55,11 +55,6 @@ public class BookingDaoImpl implements BookingDao {
     }
 
     @Override
-    public void remove(String s) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
-    }
-
-    @Override
     public void remove(Booking item) {
         throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }

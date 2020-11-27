@@ -12,7 +12,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
 
-import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 import static com.innova.doctrro.common.dto.UserDto.UserDtoRequest;
 import static com.innova.doctrro.common.dto.UserDto.UserDtoResponse;
 import static com.innova.doctrro.usrs.service.Converter.convert;
@@ -104,11 +103,6 @@ public class ReactiveUserServiceImpl implements ReactiveUserService {
                     return u;
                 }).flatMap(reactiveUserDao::remove);
 
-    }
-
-    @Override
-    public Mono<Void> remove(UserDtoRequest item) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override

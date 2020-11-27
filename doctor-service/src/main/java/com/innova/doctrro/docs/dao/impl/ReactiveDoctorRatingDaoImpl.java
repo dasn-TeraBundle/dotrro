@@ -59,11 +59,6 @@ public class ReactiveDoctorRatingDaoImpl implements ReactiveDoctorRatingDao {
     }
 
     @Override
-    public Mono<Void> remove(String s) {
-        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
-    }
-
-    @Override
     public Mono<Void> remove(DoctorRating item) {
         return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }

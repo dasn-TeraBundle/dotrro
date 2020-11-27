@@ -92,11 +92,6 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void remove(PatientDtoRequest item) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
-    }
-
-    @Override
     public void remove() {
         patientDao.remove();
     }

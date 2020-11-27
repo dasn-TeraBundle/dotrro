@@ -46,11 +46,6 @@ public class ReactiveFacilityDaoImpl implements ReactiveFacilityDao {
     }
 
     @Override
-    public Mono<Void> remove(String s) {
-        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
-    }
-
-    @Override
     public Mono<Void> remove(Facility item) {
         return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }

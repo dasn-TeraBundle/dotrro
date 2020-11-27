@@ -55,11 +55,6 @@ public class ReactiveBookingSlotDaoImpl implements ReactiveBookingSlotDao {
     }
 
     @Override
-    public Mono<Void> remove(String s) {
-        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
-    }
-
-    @Override
     public Mono<Void> remove(BookingSlot item) {
         return slotRepository.delete(item);
     }

@@ -25,7 +25,7 @@ public class ReactiveDoctorDaoImpl implements ReactiveDoctorDao {
 
     @Override
     public Mono<Doctor> create(Doctor item) {
-        return doctorRepository.insert(item);
+        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }
 
     @Override
@@ -50,21 +50,16 @@ public class ReactiveDoctorDaoImpl implements ReactiveDoctorDao {
 
     @Override
     public Mono<Doctor> update(String s, Doctor item) {
-        return doctorRepository.save(item);
-    }
-
-    @Override
-    public Mono<Void> remove(String s) {
         return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }
 
     @Override
     public Mono<Void> remove(Doctor item) {
-        return doctorRepository.delete(item);
+        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }
 
     @Override
     public Mono<Void> remove() {
-        return doctorRepository.deleteAll();
+        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }
 }

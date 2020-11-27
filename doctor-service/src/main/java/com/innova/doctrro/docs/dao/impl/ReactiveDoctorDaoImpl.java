@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
-
 
 @Component
 public class ReactiveDoctorDaoImpl implements ReactiveDoctorDao {
@@ -44,11 +42,6 @@ public class ReactiveDoctorDaoImpl implements ReactiveDoctorDao {
     @Override
     public Mono<Doctor> update(String s, Doctor item) {
         return doctorRepository.save(item);
-    }
-
-    @Override
-    public Mono<Void> remove(String s) {
-        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }
 
     @Override

@@ -75,11 +75,6 @@ public class ReactiveDoctorRatingServiceImpl implements ReactiveDoctorRatingServ
     }
 
     @Override
-    public Mono<Void> remove(DoctorRatingDtoRequest item) {
-        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
-    }
-
-    @Override
     public Mono<Void> remove() {
         return doctorRatingDao.remove();
     }

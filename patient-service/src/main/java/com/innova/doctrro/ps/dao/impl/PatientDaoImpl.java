@@ -5,14 +5,12 @@ import com.innova.doctrro.ps.dao.PatientDao;
 import com.innova.doctrro.ps.dao.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
-import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 
 
 @Component
@@ -51,11 +49,6 @@ public class PatientDaoImpl implements PatientDao {
     })
     public Patient update(String email, Patient item) {
         return patientRepository.save(item);
-    }
-
-    @Override
-    public void remove(String s) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override

@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
-
 
 @Component
 public class DoctorDaoImpl implements DoctorDao {
@@ -44,11 +42,6 @@ public class DoctorDaoImpl implements DoctorDao {
     @Override
     public Doctor update(String regId, Doctor doctor) {
         return doctorRepository.save(doctor);
-    }
-
-    @Override
-    public void remove(String s) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override

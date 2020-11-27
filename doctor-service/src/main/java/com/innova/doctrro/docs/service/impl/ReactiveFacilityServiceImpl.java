@@ -18,7 +18,6 @@ import java.util.concurrent.Executors;
 
 import static com.innova.doctrro.common.constants.DBExceptionType.DATA_NOT_FOUND;
 import static com.innova.doctrro.common.constants.DBExceptionType.DUPLICATE_KEY;
-import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 import static com.innova.doctrro.common.dto.FacilityDto.*;
 import static com.innova.doctrro.docs.service.Converters.FacilityConverter;
 
@@ -104,11 +103,6 @@ public class ReactiveFacilityServiceImpl implements ReactiveFacilityService {
         return facilityDao.findById(s)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(FacilityDBExceptionFactory.createException(DATA_NOT_FOUND))))
                 .flatMap(facilityDao::remove);
-    }
-
-    @Override
-    public Mono<Void> remove(FacilityDtoRequest item) {
-        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }
 
     @Override

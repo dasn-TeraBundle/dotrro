@@ -3,6 +3,8 @@ package com.innova.doctrro.common.service;
 import java.io.Serializable;
 import java.util.List;
 
+import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
+
 /**
  * @param <T>  Input type
  * @param <R>  Result type
@@ -19,7 +21,9 @@ public interface GenericService<T, R, ID extends Serializable> {
 
     void remove(ID id);
 
-    void remove(T item);
+    default void remove(T item) {
+        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
+    }
 
     void remove();
 }

@@ -174,11 +174,6 @@ public class ReactivePaymentDtoServiceImpl implements ReactivePaymentService {
     }
 
     @Override
-    public Mono<Void> remove(PaymentDtoRequest item) {
-        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
-    }
-
-    @Override
     public Mono<Void> remove() {
         return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }

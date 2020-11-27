@@ -66,11 +66,6 @@ public class ReactiveBookingSlotServiceImpl implements ReactiveBookingSlotServic
     }
 
     @Override
-    public Mono<Void> remove(BookingSlot item) {
-        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
-    }
-
-    @Override
     public Mono<Void> remove() {
         return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }

@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
-
 @Component
 public class UserDaoImpl implements UserDao {
 
@@ -54,11 +52,6 @@ public class UserDaoImpl implements UserDao {
     })
     public User update(String id, User user) {
         return userRepository.save(user);
-    }
-
-    @Override
-    public void remove(String s) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override

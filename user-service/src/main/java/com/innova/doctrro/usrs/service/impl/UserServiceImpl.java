@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
 import static com.innova.doctrro.common.dto.UserDto.UserDtoRequest;
 import static com.innova.doctrro.common.dto.UserDto.UserDtoResponse;
 import static com.innova.doctrro.usrs.service.Converter.convert;
@@ -82,11 +81,6 @@ public class UserServiceImpl implements UserService {
         }
 
         userDao.remove(user);
-    }
-
-    @Override
-    public void remove(UserDtoRequest item) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }
 
     @Override

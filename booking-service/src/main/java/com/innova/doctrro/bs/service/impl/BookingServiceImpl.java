@@ -239,11 +239,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void remove(BookingDtoRequest item) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
-    }
-
-    @Override
     public void remove() {
         throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }

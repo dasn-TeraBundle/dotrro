@@ -65,11 +65,6 @@ public class DoctorRatingDaoImpl implements DoctorRatingDao {
     }
 
     @Override
-    public void remove(String s) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
-    }
-
-    @Override
     public void remove(DoctorRating item) {
         throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }

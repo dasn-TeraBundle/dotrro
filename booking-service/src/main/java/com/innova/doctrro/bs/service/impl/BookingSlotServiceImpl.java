@@ -86,11 +86,6 @@ public class BookingSlotServiceImpl implements BookingSlotService {
     }
 
     @Override
-    public void remove(BookingSlot item) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
-    }
-
-    @Override
     public void remove() {
         throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
     }

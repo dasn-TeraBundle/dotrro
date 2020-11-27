@@ -14,7 +14,7 @@ import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSU
 @Component
 public class ReactivePaymentDaoImpl implements ReactivePaymentDao {
 
-    private ReactivePaymentRepository paymentRepository;
+    private final ReactivePaymentRepository paymentRepository;
 
     @Autowired
     public ReactivePaymentDaoImpl(ReactivePaymentRepository paymentRepository) {
@@ -39,11 +39,6 @@ public class ReactivePaymentDaoImpl implements ReactivePaymentDao {
     @Override
     public Mono<Payment> update(String s, Payment item) {
         return paymentRepository.save(item);
-    }
-
-    @Override
-    public Mono<Void> remove(String s) {
-        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
     }
 
     @Override

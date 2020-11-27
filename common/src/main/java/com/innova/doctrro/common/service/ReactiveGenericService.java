@@ -5,6 +5,8 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
+import static com.innova.doctrro.common.constants.ExceptionMessageConstants.UNSUPPORTED_OPERATIONS_MESSAGE;
+
 /**
  * @param <T>  Input type
  * @param <R>  Result type
@@ -21,7 +23,9 @@ public interface ReactiveGenericService<T, R, ID extends Serializable> {
 
     Mono<Void> remove(ID id);
 
-    Mono<Void> remove(T item);
+    default Mono<Void> remove(T item) {
+        return Mono.error(new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE));
+    }
 
     Mono<Void> remove();
 }

@@ -47,11 +47,6 @@ public class BookingSlotDaoImpl implements BookingSlotDao {
     }
 
     @Override
-    public void remove(String s) {
-        throw new UnsupportedOperationException(UNSUPPORTED_OPERATIONS_MESSAGE);
-    }
-
-    @Override
     public void remove(BookingSlot item) {
         slotRepository.delete(item);
     }
