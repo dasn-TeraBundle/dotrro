@@ -1,0 +1,9 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:8761/eureka
+
+logging:
+  level:
+    root: INFO
+    com.innova: INFO
