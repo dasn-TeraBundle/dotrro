@@ -86,8 +86,8 @@ public class ReactiveDoctorServiceImpl implements ReactiveDoctorService {
                     return reactiveDoctorDao.update(regId, doctor);
                 })
                 .flatMap(doctor -> {
-                    var emailUpdate = new KafkaMessage.Update("email", null, newEmail);
-                    var nameUpdate = new KafkaMessage.Update("name", null, doctor.getName());
+                    var emailUpdate = new KafkaMessage.Update<>("email", null, newEmail);
+                    var nameUpdate = new KafkaMessage.Update<>("name", null, doctor.getName());
                     var kafkaMsg = new KafkaMessage(newEmail, "U", "doctors");
                     kafkaMsg.addUpdate(emailUpdate);
                     kafkaMsg.addUpdate(nameUpdate);

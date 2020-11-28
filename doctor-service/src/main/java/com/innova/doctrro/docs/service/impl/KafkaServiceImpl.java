@@ -15,7 +15,7 @@ import java.util.List;
 public class KafkaServiceImpl implements KafkaService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final static ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Autowired
     public KafkaServiceImpl(KafkaTemplate<String, String> kafkaTemplate) {

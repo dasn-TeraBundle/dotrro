@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 
+import static com.innova.doctrro.common.constants.AuthConstants.KEY_EMAIL;
 import static com.innova.doctrro.common.dto.DoctorDto.DoctorDtoRequest;
 import static com.innova.doctrro.common.dto.DoctorDto.DoctorDtoResponse;
 
@@ -31,7 +32,7 @@ public class DoctorController {
         return auth.map(BearerTokenAuthentication::getTokenAttributes)
                 .map(details -> {
                     if (request.getEmail() == null) {
-                        request.setEmail(details.get("email").toString());
+                        request.setEmail(details.get(KEY_EMAIL).toString());
                         request.setName(details.get("name").toString());
                     }
                     return request;
@@ -42,9 +43,8 @@ public class DoctorController {
     @GetMapping("/me")
     public Mono<DoctorDtoResponse> find(Mono<BearerTokenAuthentication> auth) {
         return auth.map(BearerTokenAuthentication::getTokenAttributes)
-                .flatMap(details -> {
-                    return reactiveDoctorService.findByEmail(details.get("email").toString());
-                });
+                .map(details -> details.get(KEY_EMAIL).toString())
+                .flatMap(reactiveDoctorService::findByEmail);
     }
 
     @GetMapping("/{regId}")
@@ -62,6 +62,7 @@ public class DoctorController {
     public Mono<DoctorDtoResponse> update(Mono<BearerTokenAuthentication> auth,
                                           @RequestBody DoctorDtoRequest request) {
         return auth.map(BearerTokenAuthentication::getTokenAttributes)
-                .flatMap(details -> reactiveDoctorService.update(details.get("email").toString(), request));
+                .map(details -> details.get(KEY_EMAIL).toString())
+                .flatMap(email -> reactiveDoctorService.update(email, request));
     }
 }
