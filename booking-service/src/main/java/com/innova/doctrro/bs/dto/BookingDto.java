@@ -1,6 +1,5 @@
 package com.innova.doctrro.bs.dto;
 
-import com.innova.doctrro.bs.beans.Booking;
 import com.innova.doctrro.bs.beans.BookingStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

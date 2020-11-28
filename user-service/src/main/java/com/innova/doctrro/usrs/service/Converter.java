@@ -1,6 +1,6 @@
 package com.innova.doctrro.usrs.service;
 
-import com.innova.doctrro.common.dto.UserDto.UserDtoRequest;
+import com.innova.doctrro.usrs.dto.UserDtoRequest;
 import com.innova.doctrro.common.dto.UserDto.UserDtoResponse;
 import com.innova.doctrro.usrs.beans.User;
 

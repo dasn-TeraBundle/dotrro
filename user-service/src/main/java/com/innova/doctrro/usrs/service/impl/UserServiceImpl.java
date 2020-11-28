@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.innova.doctrro.common.dto.UserDto.UserDtoRequest;
+import com.innova.doctrro.usrs.dto.UserDtoRequest;
 import static com.innova.doctrro.common.dto.UserDto.UserDtoResponse;
 import static com.innova.doctrro.usrs.service.Converter.convert;
 

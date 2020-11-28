@@ -3,7 +3,7 @@ package com.innova.doctrro.usrs.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innova.doctrro.common.dto.KafkaMessage;
-import com.innova.doctrro.common.dto.UserDto;
+import com.innova.doctrro.usrs.dto.UserDtoRequest;
 import com.innova.doctrro.usrs.service.KafkaService;
 import com.innova.doctrro.usrs.service.UserService;
 import org.slf4j.Logger;
@@ -65,7 +65,7 @@ public class KafkaServiceImpl implements KafkaService {
                                 .findFirst()
                                 .isPresent();
                             if (isNewEmail) {
-                                var item = new UserDto.UserDtoRequest();
+                                var item = new UserDtoRequest();
                                 updates.forEach(upd -> {
                                     switch (upd.getField()) {
                                         case "email":
@@ -96,7 +96,7 @@ public class KafkaServiceImpl implements KafkaService {
                     break;
             }
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error("Error occurred", e);
         }
     }
 }

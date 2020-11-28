@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.innova.doctrro.common.dto.UserDto.UserDtoRequest;
+import com.innova.doctrro.usrs.dto.UserDtoRequest;
 import static com.innova.doctrro.common.dto.UserDto.UserDtoResponse;
 
 

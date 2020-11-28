@@ -2,8 +2,8 @@ package com.innova.doctrro.bs.controller;
 
 
 import com.innova.doctrro.bs.service.BookingService;
-import com.innova.doctrro.bs.service.BookingSlotService;
 import com.innova.doctrro.bs.service.ReactiveBookingService;
+import static com.innova.doctrro.common.constants.AuthConstants.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,7 +13,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +24,11 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final ReactiveBookingService reactiveBookingService;
-//    private final BookingSlotService bookingSlotService;
 
     @Autowired
-    public BookingController(BookingService bookingService, ReactiveBookingService reactiveBookingService/*, BookingSlotService bookingSlotService*/) {
+    public BookingController(BookingService bookingService, ReactiveBookingService reactiveBookingService) {
         this.bookingService = bookingService;
         this.reactiveBookingService = reactiveBookingService;
-//        this.bookingSlotService = bookingSlotService;
     }
 
     @PostMapping("/")
@@ -39,7 +36,7 @@ public class BookingController {
     public BookingDtoResponse book(BearerTokenAuthentication auth,
                                    @RequestBody @Valid BookingDtoRequest request) {
         Map<String, Object> details = auth.getTokenAttributes();
-        request.setBookedBy(new User(details.get("email").toString(), details.get("name").toString()));
+        request.setBookedBy(new User(details.get(KEY_EMAIL).toString(), details.get("name").toString()));
 
         return bookingService.create(request);
     }
@@ -49,14 +46,8 @@ public class BookingController {
                         @PathVariable String slotId) {
         Map<String, Object> details = auth.getTokenAttributes();
 
-        return bookingService.lockSlot(slotId, details.get("email").toString());
+        return bookingService.lockSlot(slotId, details.get(KEY_EMAIL).toString());
     }
-
-//    @GetMapping("/")
-//    @Deprecated
-//    public void createSlots() {
-//        bookingSlotService.create(new ArrayList<>());
-//    }
 
     @GetMapping("/booking/{id}")
     public Mono<BookingDtoResponse> find(@PathVariable String id) {
@@ -64,45 +55,45 @@ public class BookingController {
     }
 
     @GetMapping("/patients/me")
-    public List<BookingDtoResponse> findMyBookings_Patient(BearerTokenAuthentication auth) {
+    public List<BookingDtoResponse> findAllBookingsByPatient(BearerTokenAuthentication auth) {
         Map<String, Object> details = auth.getTokenAttributes();
-        String email = details.get("email").toString();
+        String email = details.get(KEY_EMAIL).toString();
 
         return bookingService.findAllByBookeUserEmail(email);
     }
 
     @GetMapping("/doctors/me")
-    public List<BookingDtoResponse> findMyBookings_Doctor(BearerTokenAuthentication auth) {
-        return bookingService.findAllByPractitionerEmail("Bearer " + auth.getToken().getTokenValue());
+    public List<BookingDtoResponse> findAllBookingsForDoctor(BearerTokenAuthentication auth) {
+        return bookingService.findAllByPractitionerEmail(KEY_BEARER + " " + auth.getToken().getTokenValue());
     }
 
     @GetMapping("/v2/patients/me")
-    public Flux<BookingDtoResponse> findMyBookings_Patient(Mono<BearerTokenAuthentication> auth) {
+    public Flux<BookingDtoResponse> findAllBookingsByPatient(Mono<BearerTokenAuthentication> auth) {
         return auth.map(BearerTokenAuthentication::getTokenAttributes)
-                .map(details -> details.get("email").toString())
+                .map(details -> details.get(KEY_EMAIL).toString())
                 .flatMapMany(reactiveBookingService::findAllByBookeUserEmail);
     }
 
     @GetMapping(value = "/v2/doctors/me", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
-    public Flux<BookingDtoResponse> findMyBookings_Doctor(Mono<BearerTokenAuthentication> auth) {
+    public Flux<BookingDtoResponse> findAllBookingsForDoctor(Mono<BearerTokenAuthentication> auth) {
         return auth.map(BearerTokenAuthentication::getToken)
-                .map(t -> "Bearer " + t.getTokenValue())
+                .map(t -> KEY_BEARER + " " + t.getTokenValue())
                 .flatMapMany(reactiveBookingService::findAllByPractitionerEmail);
     }
 
     @PatchMapping("/cancel/patients/{bookingId}")
-    public BookingDtoResponse cancel_Patient(BearerTokenAuthentication auth,
-                                                           @PathVariable String bookingId) {
+    public BookingDtoResponse cancelByPatient(BearerTokenAuthentication auth,
+                                             @PathVariable String bookingId) {
         Map<String, Object> details = auth.getTokenAttributes();
-        String email = details.get("email").toString();
+        String email = details.get(KEY_EMAIL).toString();
 
         return bookingService.cancelByPatient(bookingId, email);
     }
 
     @PatchMapping("/cancel/doctors/{bookingId}")
-    public BookingDtoResponse cancel_Doctor(BearerTokenAuthentication auth,
-                                                          @PathVariable String bookingId) {
-        return bookingService.cancelByDoctor(bookingId, "Bearer " + auth.getToken().getTokenValue());
+    public BookingDtoResponse cancelByDoctor(BearerTokenAuthentication auth,
+                                            @PathVariable String bookingId) {
+        return bookingService.cancelByDoctor(bookingId, KEY_BEARER + " " + auth.getToken().getTokenValue());
     }
 
 }

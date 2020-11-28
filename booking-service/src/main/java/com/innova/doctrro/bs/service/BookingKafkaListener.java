@@ -56,15 +56,15 @@ class BookingKafkaListener {
                     }).collect(Collectors.toList());
 
             bookingSlotService.create(slots)
-                    .subscribe(slot -> {
-                        LOGGER.info("Created slot {}", slot.getId());
-                    }, err -> {
-                        if (!(err instanceof DuplicateKeyException)) {
-                            LOGGER.error("Error creating slot", err);
-                        } else {
-                            LOGGER.error("Slots already created earlier");
-                        }
-                    });
+                    .subscribe(
+                            slot -> LOGGER.info("Created slot {}", slot.getId()),
+                            err -> {
+                                if (!(err instanceof DuplicateKeyException)) {
+                                    LOGGER.error("Error creating slot", err);
+                                } else {
+                                    LOGGER.error("Slots already created earlier");
+                                }
+                            });
         } catch (JsonProcessingException e) {
             LOGGER.error("Error while processing", e);
         }

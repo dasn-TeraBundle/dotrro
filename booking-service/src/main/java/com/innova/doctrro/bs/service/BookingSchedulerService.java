@@ -44,17 +44,12 @@ class BookingSchedulerService {
         var now = LocalDateTime.now();
         var threshold = now.minusMinutes(createTimeThreshold);
 
-//        bookingDao.findAll()
-//                .filter(booking -> booking.getStatus() == BookingStatus.INITIATED && (booking.getCreatedOn() == null ||
-//                        (threshold.isAfter(booking.getCreatedOn()) &&
-//                                (booking.getUpdatedOn() == null || threshold.isAfter(booking.getUpdatedOn())) ))
-//                )
         bookingDao.findAllByStatusAndCreatedOnBefore(INITIATED, threshold)
                 .flatMap(booking ->
                         Flux.combineLatest(
                                 Flux.just(booking),
                                 bookingSlotService.findById(booking.getSlotId()),
-                                (b, bs) -> Arrays.asList(b, bs)
+                                Arrays::asList
                         )
                 )
                 .filter(v -> {
@@ -71,7 +66,7 @@ class BookingSchedulerService {
                     return Flux.combineLatest(
                             bookingDao.update(booking.getId(), booking),
                             bookingSlotService.update(slot.getId(), slot),
-                            (b, bs) -> Arrays.asList(b, bs)
+                            Arrays::asList
                     );
                 })
                 .subscribe(v -> {
