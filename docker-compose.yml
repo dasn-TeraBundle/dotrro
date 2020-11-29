@@ -1,0 +1,52 @@
+version: "2"
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    volumes:
+    - mongodata:/data/db
+#    ports:
+#      - "27017:27017"
+
+  eureka:
+    image: eureka
+    container_name: eureka
+    ports:
+      - "8761:8761"
+
+  config-server:
+    image: config-server
+    container_name: config-server
+    ports:
+      - "8888:8888"
+
+  gateway:
+    image: gateway
+    container_name: gateway
+    restart: on-failure
+    environment:
+      - PROFILE=docker
+      - CONFIG_URI=http://config-server:8888
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka
+      - config-server
+
+  user-service:
+    image: user-service
+    container_name: user-service
+    restart: on-failure
+    environment:
+      - PROFILE=docker
+      - CONFIG_URI=http://config-server:8888
+    ports:
+      - "8011:8011"
+    depends_on:
+      - eureka
+      - mongo
+      - config-server
+      - gateway
+
+volumes:
+  mongodata:
