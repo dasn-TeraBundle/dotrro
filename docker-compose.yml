@@ -48,5 +48,20 @@ services:
       - config-server
       - gateway
 
+  patient-service:
+    image: patient-service
+    container_name: patient-service
+    restart: on-failure
+    environment:
+      - PROFILE=docker
+      - CONFIG_URI=http://config-server:8888
+#    ports:
+#      - "8011:8011"
+    depends_on:
+      - eureka
+      - mongo
+      - config-server
+      - gateway
+
 volumes:
   mongodata:

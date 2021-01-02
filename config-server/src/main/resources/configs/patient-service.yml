@@ -1,0 +1,15 @@
+spring:
+  data:
+    mongodb:
+      database: patient
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+logging:
+  level:
+    root: INFO
+    com.innova: DEBUG
+

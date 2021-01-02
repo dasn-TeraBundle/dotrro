@@ -17,3 +17,7 @@ cd ..
 cd user-service
 docker build -t user-service .
 cd ..
+
+cd patient-service
+docker build -t patient-service .
+cd ..
