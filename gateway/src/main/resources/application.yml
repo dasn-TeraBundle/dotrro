@@ -17,44 +17,44 @@ spring:
           uri: lb://admin-service
           predicates:
             - Path=/admin-service/**
-          filters:
-            - TokenRelay=
+#          filters:
+#            - TokenRelay=
         - id: user-servicre
           uri: lb://user-service
           predicates:
             - Path=/user-service/**
-          filters:
-            - TokenRelay=
+#          filters:
+#            - TokenRelay=
         - id: patient-servicre
           uri: lb://patient-service
           predicates:
             - Path=/patient-service/**
-          filters:
-            - TokenRelay=
+#          filters:
+#            - TokenRelay=
         - id: doctor-servicre
           uri: lb://doctor-service
           predicates:
           - Path=/doctor-service/**
-          filters:
-          - TokenRelay=
+#          filters:
+#          - TokenRelay=
         - id: search-servicre
           uri: lb://search-service
           predicates:
             - Path=/search-service/**
-          filters:
-            - TokenRelay=
+#          filters:
+#            - TokenRelay=
         - id: booking-servicre
           uri: lb://booking-service
           predicates:
             - Path=/booking-service/**
-          filters:
-            - TokenRelay=
+#          filters:
+#            - TokenRelay=
         - id: payment-servicre
           uri: lb://payment-service
           predicates:
             - Path=/payment-service/**
-          filters:
-            - TokenRelay=
+#          filters:
+#            - TokenRelay=
 
 
 logging:
