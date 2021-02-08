@@ -1,0 +1,12 @@
+rootProject.name = 'doctrro-app'
+
+include "eureka"
+include "gateway"
+include "config-server"
+include "common"
+include "user-service"
+include "patient-service"
+include "doctor-service"
+include "search-service"
+include "booking-service"
+include "payment-service"
